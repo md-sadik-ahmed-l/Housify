@@ -1,9 +1,15 @@
 import React from 'react';
+import AddPropertyForm from './AddPropertyForm';
+import { getUserSession } from '@/lib/core/session';
 
-const AddNewPropertyPage = () => {
+const AddNewPropertyPage = async() => {
+
+    const user = await getUserSession();
+
+    // console.log(user?.id)
     return (
         <div>
-            add new
+            <AddPropertyForm user={user} ></AddPropertyForm>
         </div>
     );
 };

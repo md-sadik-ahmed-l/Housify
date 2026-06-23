@@ -11,8 +11,9 @@ export default function Navbar() {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { data: session, isPending } = useSession();
-  console.log("Session data in Navbar:", session, "Is pending:", isPending);
+  // console.log("Session data in Navbar:", session, "Is pending:", isPending);
   const user = session?.user;
+  // console.log(user.id)
 
   const handleSignOut = async () => {
     await signOut();
@@ -24,8 +25,8 @@ export default function Navbar() {
       href: "/",
     },
     {
-      label: "Properties",
-      href: "/properties",
+      label: "Browse Properties",
+      href: "/all-properties",
     },
     {
       label: "Services",
