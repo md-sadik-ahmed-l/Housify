@@ -6,14 +6,23 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 export const getProperties = async () =>{
 
     return serverFetch('/api/all-properties');
-    
+
 }
 
 
-export const getOwnerProperties = async (ownerId) => {
+export const getPropertyById = async (propertyId) => {
+    return serverFetch(`/api/property/${propertyId}`);
+}
 
-    const res = await fetch(`${baseUrl}/api/properties?ownerId=${ownerId}`);
+
+
+export const getOwnerProperties = async (userId) => {
+
+    const res = await fetch(`${baseUrl}/api/properties?userId=${userId}`);
 
     return res.json();
     
 }
+
+
+

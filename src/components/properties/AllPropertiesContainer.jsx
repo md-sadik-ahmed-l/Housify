@@ -4,34 +4,33 @@ import React, { useMemo, useState } from "react";
 import PropertyCard from "./PropertyCard";
 import PropertyFilters from "./PropertyFilters";
 
-export default function AllPropertiesContainer({
-  initialProperties,
-}) {
+export default function AllPropertiesContainer({ initialProperties }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedType, setSelectedType] = useState("all");
+  const [sortOrder, setSortOrder] = useState("");
 
   const filteredProperties = useMemo(() => {
-    return initialProperties.filter((property) => {
+    const filtered = initialProperties.filter((property) => {
       const matchesSearch =
-        property.title
-          ?.toLowerCase()
-          .includes(searchQuery.toLowerCase()) ||
-        property.location
-          ?.toLowerCase()
-          .includes(searchQuery.toLowerCase());
+        property.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        property.location?.toLowerCase().includes(searchQuery.toLowerCase());
 
       const matchesType =
-        selectedType === "all" ||
-        property.propertyType === selectedType;
+        selectedType === "all" || property.propertyType === selectedType;
 
       return matchesSearch && matchesType;
     });
-  }, [
-    searchQuery,
-    selectedType,
-    initialProperties,
-  ]);
 
+    if (sortOrder === "lowToHigh") {
+      filtered.sort((a, b) => a.price - b.price);
+    }
+
+    if (sortOrder === "highToLow") {
+      filtered.sort((a, b) => b.price - a.price);
+    }
+
+    return filtered;
+  }, [searchQuery, selectedType, sortOrder, initialProperties]);
   return (
     <>
       <PropertyFilters
@@ -39,6 +38,8 @@ export default function AllPropertiesContainer({
         setSearchQuery={setSearchQuery}
         selectedType={selectedType}
         setSelectedType={setSelectedType}
+        sortOrder={sortOrder}
+        setSortOrder={setSortOrder}
       />
 
       <div className="max-w-7xl mx-auto mb-6 text-zinc-400">
@@ -47,20 +48,13 @@ export default function AllPropertiesContainer({
 
       {filteredProperties.length > 0 ? (
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
           {filteredProperties.map((property) => (
-            <PropertyCard
-              key={property._id}
-              property={property}
-            />
+            <PropertyCard key={property._id} property={property} />
           ))}
-
         </div>
       ) : (
         <div className="max-w-7xl mx-auto text-center py-20 border border-dashed border-zinc-800 rounded-3xl">
-          <p className="text-zinc-500">
-            No properties found.
-          </p>
+          <p className="text-zinc-500">No properties found.</p>
         </div>
       )}
     </>

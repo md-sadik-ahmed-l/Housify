@@ -8,16 +8,14 @@ export default function PropertyFilters({
   setSearchQuery,
   selectedType,
   setSelectedType,
+  sortOrder,
+  setSortOrder,
 }) {
   return (
     <div className="max-w-7xl mx-auto bg-zinc-900 p-6 rounded-3xl mb-8">
-
-      <div className="grid md:grid-cols-2 gap-4">
-
-        <div>
-          <label className="block mb-2 text-zinc-400">
-            Search Property
-          </label>
+      <div className="grid md:grid-cols-5 gap-4">
+        <div className="col-span-3">
+          <label className="block mb-2 text-zinc-400">Search Property</label>
 
           <div className="flex items-center bg-zinc-800 rounded-xl px-4">
             <Magnifier className="w-4 h-4 text-zinc-500" />
@@ -32,10 +30,8 @@ export default function PropertyFilters({
           </div>
         </div>
 
-        <div>
-          <label className="block mb-2 text-zinc-400">
-            Property Type
-          </label>
+        <div className="col-span-1">
+          <label className="block mb-2 text-zinc-400">Property Type</label>
 
           <select
             value={selectedType}
@@ -51,9 +47,22 @@ export default function PropertyFilters({
           </select>
         </div>
 
-      </div>
 
+        <div  className="col-span-1">
+          <label className="block mb-2 text-zinc-400">Sort By Price</label>
+
+          <select
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+            className="w-full bg-zinc-800 text-white p-3 rounded-xl"
+          >
+            <option value="">Default</option>
+            <option value="lowToHigh">Price: Low</option>
+            <option value="highToLow">Price: High</option>
+          </select>
+        </div>
+
+      </div>
     </div>
   );
 }
-

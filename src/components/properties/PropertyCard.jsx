@@ -78,7 +78,7 @@ export default function PropertyCard({ property }) {
       <Card.Footer className="p-0">
 
         <Link
-          href={`/properties/${propertyId}`}
+          href={`/all-properties/${propertyId}`}
           className="group flex items-center gap-2 text-white"
         >
           View Details

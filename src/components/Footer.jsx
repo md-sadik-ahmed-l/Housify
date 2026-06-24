@@ -1,168 +1,314 @@
 import Link from "next/link";
-import {
-  LogoFacebook,
-  LogoLinkedin,
-  LogoGithub,
-} from "@gravity-ui/icons";
-
+import { LogoFacebook, LogoLinkedin, LogoGithub } from "@gravity-ui/icons";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-white/10 bg-black text-white">
-      <div className="mx-auto max-w-7xl px-6 py-10 lg:px-8">
+    <footer className="border-t border-white/8 bg-white text-[#080A10]">
+      <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
+
         {/* TOP SECTION */}
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
-          {/* LEFT */}
-          <div className="space-y-6">
-            {/* Logo */}
-            <Link href="/" className="flex items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-600 to-fuchsia-500">
-                <span className="text-xl font-bold text-white">N</span>
-              </div>
 
+          {/* LEFT — Brand */}
+          <div className="space-y-6">
+            <Link href="/" className="flex items-center gap-3 group">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 transition group-hover:bg-blue-500">
+                <span className="text-base font-bold tracking-tight text-white">H</span>
+              </div>
               <div className="leading-none">
-                <h2 className="text-xl font-bold">HOUSIFY</h2>
-                <h2 className="text-xl font-bold"></h2>
+                <h2 className="text-[15px] font-semibold tracking-[0.12em] uppercase text-[#080A10]">
+                  Housify
+                </h2>
+                <p className="text-[10px] tracking-[0.1em] uppercase text-white/30 mt-0.5">
+                  Property Platform
+                </p>
               </div>
             </Link>
 
-            {/* Description */}
-            <p className="max-w-xs leading-8 text-gray-400">
-              The Property Rental & Booking Platform. The platform connects tenants and property owners through a transparent and secure rental marketplace.
+            <p className="max-w-[240px] text-[13px] leading-[1.8] text-[#080A10]">
+              Connecting tenants and property owners through a transparent and secure rental marketplace.
             </p>
-
-            
           </div>
 
           {/* PRODUCT */}
           <div>
-            <h3 className="mb-6 text-lg font-semibold text-violet-500">
+            <h3 className="mb-6 text-[18px] font-bold uppercase tracking-[0.16em] text-blue-400">
               Product
             </h3>
-
-            <ul className="space-y-4 text-gray-400">
-              <li>
-                <Link href="/jobs" className="transition hover:text-white">
-                  Job discovery
-                </Link>
-              </li>
-
-              <li>
-                <Link href="/worker-ai" className="transition hover:text-white">
-                  Worker AI
-                </Link>
-              </li>
-
-              <li>
-                <Link href="/companies" className="transition hover:text-white">
-                  Companies
-                </Link>
-              </li>
-
-              <li>
-                <Link href="/salary" className="transition hover:text-white">
-                  Salary data
-                </Link>
-              </li>
+            <ul className="space-y-3.5">
+              {[
+                { href: "/jobs", label: "Job discovery" },
+                { href: "/worker-ai", label: "Worker AI" },
+                { href: "/companies", label: "Companies" },
+                { href: "/salary", label: "Salary data" },
+              ].map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="text-[13px] text-[#080A10] transition-colors duration-200 hover:text-blue-300"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           {/* NAVIGATION */}
           <div>
-            <h3 className="mb-6 text-lg font-semibold text-violet-500">
-              Navigations
+            <h3 className="mb-6 text-[18px] font-bold uppercase tracking-[0.16em] text-blue-400">
+              Navigation
             </h3>
-
-            <ul className="space-y-4 text-gray-400">
-              <li>
-                <Link
-                  href="/help-center"
-                  className="transition hover:text-white"
-                >
-                  Help center
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  href="/career-library"
-                  className="transition hover:text-white"
-                >
-                  Career library
-                </Link>
-              </li>
-
-              <li>
-                <Link href="/contact" className="transition hover:text-white">
-                  Contact
-                </Link>
-              </li>
+            <ul className="space-y-3.5">
+              {[
+                { href: "/help-center", label: "Help center" },
+                { href: "/career-library", label: "Career library" },
+                { href: "/contact", label: "Contact" },
+              ].map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="text-[13px] text-[#080A10] transition-colors duration-200 hover:text-blue-300"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* RESOURCES */}
+          {/* RESOURCES + SOCIALS */}
           <div>
-            <h3 className="mb-6 text-lg font-semibold text-violet-500">
+            <h3 className="mb-6 text-[18px] font-bold uppercase tracking-[0.16em] text-blue-400">
               Resources
             </h3>
-
-            <ul className="space-y-4 text-gray-400">
-              <li>
-                <Link
-                  href="/brand-guideline"
-                  className="transition hover:text-white"
-                >
-                  Brand Guideline
-                </Link>
-              </li>
-
-              <li>
-                <Link href="/newsroom" className="transition hover:text-white">
-                  Newsroom
-                </Link>
-              </li>
+            <ul className="space-y-3.5">
+              {[
+                { href: "/brand-guideline", label: "Brand Guideline" },
+                { href: "/newsroom", label: "Newsroom" },
+              ].map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="text-[13px] text-[#080A10] transition-colors duration-200 hover:text-blue-300"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
+
             {/* Social Icons */}
-            <div className="flex items-center gap-4 pt-6">
-              <Link
-                href="#"
-                className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/10 transition hover:bg-violet-600"
-              >
-                <LogoFacebook className="h-5 w-5" />
-              </Link>
-
-              <Link
-                href="#"
-                className="flex h-12 w-12 items-center justify-center rounded-xl bg-violet-600 transition hover:bg-violet-500"
-              >
-                <LogoGithub className="h-5 w-5" />
-              </Link>
-
-              <Link
-                href="#"
-                className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/10 transition hover:bg-violet-600"
-              >
-                <LogoLinkedin className="h-5 w-5" />
-              </Link>
+            <div className="flex items-center gap-3 pt-8">
+              {[
+                { href: "#", icon: <LogoFacebook className="h-4 w-4" />, label: "Facebook" },
+                { href: "#", icon: <LogoGithub className="h-4 w-4" />, label: "GitHub" },
+                { href: "#", icon: <LogoLinkedin className="h-4 w-4" />, label: "LinkedIn" },
+              ].map((s) => (
+                <Link
+                  key={s.label}
+                  href={s.href}
+                  aria-label={s.label}
+                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 text-[#080A10] transition-all duration-200 hover:border-blue-500/50 hover:bg-blue-600/10 hover:text-blue-300"
+                >
+                  {s.icon}
+                </Link>
+              ))}
             </div>
           </div>
         </div>
 
         {/* BOTTOM */}
-        <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 text-sm text-gray-500 md:flex-row">
-          <p>Copyright 2024 — Housify</p>
-
+        <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-white/8 pt-8 md:flex-row">
+          <p className="text-[12px] text-[#080A10] tracking-wide">
+            ©️ 2024 Housify. All rights reserved.
+          </p>
           <div className="flex items-center gap-6">
-            <Link href="/terms" className="transition hover:text-white">
-              Terms & Policy
-            </Link>
-
-            <Link href="/privacy" className="transition hover:text-white">
-              Privacy Guideline
-            </Link>
+            {[
+              { href: "/terms", label: "Terms & Policy" },
+              { href: "/privacy", label: "Privacy Guideline" },
+            ].map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="text-[12px] text-[#080A10] tracking-wide transition-colors hover:text-blue-300"
+              >
+                {item.label}
+              </Link>
+            ))}
           </div>
         </div>
+
       </div>
     </footer>
   );
 }
+
+// import Link from "next/link";
+// import {
+//   LogoFacebook,
+//   LogoLinkedin,
+//   LogoGithub,
+// } from "@gravity-ui/icons";
+
+
+// export default function Footer() {
+//   return (
+//     <footer className="border-t border-white/10 bg-black text-white">
+//       <div className="mx-auto max-w-7xl px-6 py-10 lg:px-8">
+//         {/* TOP SECTION */}
+//         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
+//           {/* LEFT */}
+//           <div className="space-y-6">
+//             {/* Logo */}
+//             <Link href="/" className="flex items-center gap-3">
+//               <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-600 to-fuchsia-500">
+//                 <span className="text-xl font-bold text-white">N</span>
+//               </div>
+
+//               <div className="leading-none">
+//                 <h2 className="text-xl font-bold">HOUSIFY</h2>
+//                 <h2 className="text-xl font-bold"></h2>
+//               </div>
+//             </Link>
+
+//             {/* Description */}
+//             <p className="max-w-xs leading-8 text-gray-400">
+//               The Property Rental & Booking Platform. The platform connects tenants and property owners through a transparent and secure rental marketplace.
+//             </p>
+
+            
+//           </div>
+
+//           {/* PRODUCT */}
+//           <div>
+//             <h3 className="mb-6 text-lg font-semibold text-violet-500">
+//               Product
+//             </h3>
+
+//             <ul className="space-y-4 text-gray-400">
+//               <li>
+//                 <Link href="/jobs" className="transition hover:text-white">
+//                   Job discovery
+//                 </Link>
+//               </li>
+
+//               <li>
+//                 <Link href="/worker-ai" className="transition hover:text-white">
+//                   Worker AI
+//                 </Link>
+//               </li>
+
+//               <li>
+//                 <Link href="/companies" className="transition hover:text-white">
+//                   Companies
+//                 </Link>
+//               </li>
+
+//               <li>
+//                 <Link href="/salary" className="transition hover:text-white">
+//                   Salary data
+//                 </Link>
+//               </li>
+//             </ul>
+//           </div>
+
+//           {/* NAVIGATION */}
+//           <div>
+//             <h3 className="mb-6 text-lg font-semibold text-violet-500">
+//               Navigations
+//             </h3>
+
+//             <ul className="space-y-4 text-gray-400">
+//               <li>
+//                 <Link
+//                   href="/help-center"
+//                   className="transition hover:text-white"
+//                 >
+//                   Help center
+//                 </Link>
+//               </li>
+
+//               <li>
+//                 <Link
+//                   href="/career-library"
+//                   className="transition hover:text-white"
+//                 >
+//                   Career library
+//                 </Link>
+//               </li>
+
+//               <li>
+//                 <Link href="/contact" className="transition hover:text-white">
+//                   Contact
+//                 </Link>
+//               </li>
+//             </ul>
+//           </div>
+
+//           {/* RESOURCES */}
+//           <div>
+//             <h3 className="mb-6 text-lg font-semibold text-violet-500">
+//               Resources
+//             </h3>
+
+//             <ul className="space-y-4 text-gray-400">
+//               <li>
+//                 <Link
+//                   href="/brand-guideline"
+//                   className="transition hover:text-white"
+//                 >
+//                   Brand Guideline
+//                 </Link>
+//               </li>
+
+//               <li>
+//                 <Link href="/newsroom" className="transition hover:text-white">
+//                   Newsroom
+//                 </Link>
+//               </li>
+//             </ul>
+//             {/* Social Icons */}
+//             <div className="flex items-center gap-4 pt-6">
+//               <Link
+//                 href="#"
+//                 className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/10 transition hover:bg-violet-600"
+//               >
+//                 <LogoFacebook className="h-5 w-5" />
+//               </Link>
+
+//               <Link
+//                 href="#"
+//                 className="flex h-12 w-12 items-center justify-center rounded-xl bg-violet-600 transition hover:bg-violet-500"
+//               >
+//                 <LogoGithub className="h-5 w-5" />
+//               </Link>
+
+//               <Link
+//                 href="#"
+//                 className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/10 transition hover:bg-violet-600"
+//               >
+//                 <LogoLinkedin className="h-5 w-5" />
+//               </Link>
+//             </div>
+//           </div>
+//         </div>
+
+//         {/* BOTTOM */}
+//         <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 text-sm text-gray-500 md:flex-row">
+//           <p>Copyright 2024 — Housify</p>
+
+//           <div className="flex items-center gap-6">
+//             <Link href="/terms" className="transition hover:text-white">
+//               Terms & Policy
+//             </Link>
+
+//             <Link href="/privacy" className="transition hover:text-white">
+//               Privacy Guideline
+//             </Link>
+//           </div>
+//         </div>
+//       </div>
+//     </footer>
+//   );
+// }
