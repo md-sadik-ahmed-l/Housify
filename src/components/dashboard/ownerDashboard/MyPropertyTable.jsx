@@ -25,10 +25,10 @@ const MyPropertyTable = ({ properties = [] }) => {
       {/* Header */}
       <div className="px-6 py-5 border-b border-base-300 flex items-center justify-between">
         <div>
-          <h2 className="text-base font-medium">Listed properties</h2>
-          <p className="text-xs text-gray-400 mt-0.5">Manage and track your active listings</p>
+          <h2 className=" text-xl font-medium">Listed properties</h2>
+          <p className="text-sm text-gray-400 mt-0.5">Manage and track your active listings</p>
         </div>
-        <span className="text-xs font-medium bg-blue-50 text-blue-800 px-3 py-1 rounded-md">
+        <span className="text-sm font-medium bg-blue-50 text-blue-800 px-3 py-2 rounded-xl">
           {properties.length} properties
         </span>
       </div>
@@ -41,7 +41,7 @@ const MyPropertyTable = ({ properties = [] }) => {
               {["Property", "Type", "Location", "Price", "Status", "Actions"].map((h, i) => (
                 <th
                   key={h}
-                  className={`px-4 py-2.5 text-left text-[11px] font-medium uppercase tracking-wider text-gray-400 ${
+                  className={`px-4 py-4 text-left text-sm font-medium uppercase tracking-wider text-gray-300 ${
                     i === 5 ? "text-center" : ""
                   }`}
                 >
@@ -61,8 +61,8 @@ const MyPropertyTable = ({ properties = [] }) => {
                   {/* Property */}
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
-                        <Building2 size={17} className="text-blue-600" />
+                      <div className="w-11 h-11 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
+                        <Building2 size={27} className="text-blue-600" />
                       </div>
                       <div>
                         <p className="font-medium text-sm md:text-xl leading-tight">{property.title}</p>
@@ -100,14 +100,14 @@ const MyPropertyTable = ({ properties = [] }) => {
 
                   {/* Actions */}
                   <td className="">
-                    <div className="flex justify-center gap-1.5">
+                    <div className="flex justify-center gap-3">
                       <Link
                         href={`/dashboard/owner/properties/update/${property._id}`}
-                        className="p-2 sm:p-4  rounded-md border border-blue-200 text-blue-600 hover:bg-blue-50 transition-colors"
+                        className="p-2 sm:p-4  rounded-2xl border border-blue-200 text-blue-600 hover:bg-blue-50 transition-colors"
                       >
                         <Pencil size={24} />
                       </Link>
-                      <button className="p-2 sm:p-4 rounded-md border border-red-200 text-red-600 hover:bg-red-50 transition-colors">
+                      <button className="p-2 sm:p-4 rounded-2xl border border-red-200 text-red-600 hover:bg-red-50 transition-colors">
                         <Trash2 size={24} />
                       </button>
                     </div>

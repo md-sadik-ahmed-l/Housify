@@ -26,8 +26,6 @@ const BookingModal = ({ open, onClose, property, user }) => {
     });
   };
 
-
-
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 w-full max-w-md">
@@ -87,12 +85,14 @@ const BookingModal = ({ open, onClose, property, user }) => {
             Cancel
           </button>
 
-        
           <form action="/api/chackout_sessions" method="POST">
             <input type="hidden" name="price" value={property?.price} />
-            
+            <input type="hidden" name="phone" value={form.phone} />
+            <input type="hidden" name="notes" value={form.notes} />
+            <input type="hidden" name="moveInDate" value={form.moveInDate} />
             <input type="hidden" name="title" value={property?.title} />
             <input type="hidden" name="productId" value={property?._id} />
+            <input type="hidden" name="ownerId" value={property?.userId} />
             <input type="hidden" name="role" value={"tenant"} />
             <input
               type="hidden"

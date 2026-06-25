@@ -5,6 +5,7 @@ import { auth } from "@/lib/auth"
 import { headers } from "next/headers"
 
 export default async function PaymentSuccess({ searchParams }) {
+
     const { session_id } = await searchParams
 
     if (!session_id) redirect("/")
@@ -23,17 +24,21 @@ export default async function PaymentSuccess({ searchParams }) {
             method: "POST",
             headers: { "Content-Type": "application/json", },
 
-            
+
             body: JSON.stringify({
                 sessionId: session_id,
                 userId: metadata.userId,
+                tenantName: metadata.tenantName,
                 userEmail: metadata.userEmail,
                 propertyId: metadata.productId,
                 title: metadata.title,
+                phone: metadata.phone,
+                notes: metadata.notes,
+                moveInDate: metadata.moveInDate,
                 totalPrice: Number(metadata.totalPrice),
                 status: "pending",
                 bookedAt: new Date().toISOString(),
-                ownerEmail: metadata.ownerEmail
+                ownerId: metadata.ownerId
             })
 
         })

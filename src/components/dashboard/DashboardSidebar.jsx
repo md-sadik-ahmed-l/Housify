@@ -15,7 +15,7 @@ export function DashboardSidebar() {
     { icon: House, href: "/dashboard/owner", label: "Home" },
     { icon: Magnifier, href: "/dashboard/owner/properties", label: "My Properties" },
     { icon: CirclePlus, href: "/dashboard/owner/add-property", label: "Add Property" },
-    { icon: Envelope, href: "/dashboard/owner", label: "Booking Requests" },
+    { icon: Envelope, href: "/dashboard/owner/booking-requests", label: "Booking Requests" },
     { icon: Person, href: "/dashboard/owner", label: "Profile" },
     { icon: Gear, href: "/dashboard/owner", label: "Settings" },
   ];

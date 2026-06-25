@@ -18,12 +18,16 @@ export async function POST(request) {
         }
 
         const formData = await request.formData()
-        const price = formData.get("price") // total price (nights × per night)
-        const nights = formData.get("nights")
+
+        const price = formData.get("price") 
+        const phone = formData.get("phone")
+        const notes = formData.get("notes")
+        const moveInDate = formData.get("moveInDate")
+        
         const title = formData.get("title")
         const productId = formData.get("productId")
         const role = formData.get("role")
-        const ownerEmail = formData.get("ownerEmail")
+        const ownerId = formData.get("ownerId")
 
         const session = await stripe.checkout.sessions.create({
             customer_email: user.email,
@@ -34,7 +38,7 @@ export async function POST(request) {
                         unit_amount: Math.round(Number(price) * 100), // cents এ convert
 
                         product_data: {
-                            name: `${title} — ${nights} night(s)`
+                            name: `${title}`
                         }
                     },
                     quantity: 1
@@ -43,12 +47,15 @@ export async function POST(request) {
             metadata: {
                 userId: user.id,
                 userEmail: user.email,
+                tenantName: user.name,
                 title,
                 productId,
-                nights,
+                phone,
+                notes,
+                moveInDate,
                 totalPrice: price,
                 role,
-                ownerEmail
+                ownerId
             },
             mode: "payment",
             success_url: `${origin}/all-properties/payment-success?session_id={CHECKOUT_SESSION_ID}`,

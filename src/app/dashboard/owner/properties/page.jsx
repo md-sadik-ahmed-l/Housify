@@ -14,14 +14,14 @@ const OwnerPropertiesPage = async () => {
   const properties = await getOwnerProperties(user.id);
 
   return (
-    <div className="flex-1 bg-base-200 p-6 min-h-screen">
+    <div className="flex-1 bg-base-200 px-3 sm:px-6 py-7 sm:pt-15 pb-25 min-h-screen">
       <div className="max-w-6xl mx-auto">
 
         {/* Page header */}
         <div className="flex items-end justify-between mb-8">
           <div>
-            <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Owner Dashboard</p>
-            <h1 className="text-3xl font-medium tracking-tight">My Properties</h1>
+            
+            <h1 className="text-2xl sm:text-4xl font-medium tracking-tight">My Properties</h1>
           </div>
           <Link
             href="/dashboard/owner/add-property"
@@ -42,7 +42,7 @@ const OwnerPropertiesPage = async () => {
             </div>
             <h3 className="text-lg font-medium mb-1">No properties listed yet</h3>
             <p className="text-sm text-gray-400 max-w-xs mb-7">
-              You haven't added any properties. Create your first listing to start renting.
+              You have not added any properties. Create your first listing to start renting.
             </p>
             <Link
               href="/dashboard/owner/properties/add"
