@@ -52,7 +52,7 @@ export default async function PaymentSuccess({ searchParams }) {
                         Confirmation sent to <span className="text-[#ffb77e]">{customer_details?.email}</span>
                     </p>
                     <p className="text-[#d9c2b3]">
-                        <span className="text-white font-semibold">{metadata.title}</span> — {metadata.nights} night(s)
+                        <span className="text-white font-semibold">{metadata.title}</span>
                     </p>
                     <p className="text-[#ffb77e] text-xl font-bold">${Number(metadata.totalPrice).toLocaleString()}</p>
                     <Link
