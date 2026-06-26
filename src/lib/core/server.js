@@ -16,6 +16,18 @@ export const serverFetch = async (path) => {
 
 
 
+
+
+
+export const serverDelete = async (path, data) => {
+    const res = await fetch(`${baseUrl}${path}`, { method: "DELETE" }
+      );
+
+    // handle 401, 404, 403
+
+    return await res.json();
+}
+
 export const serverMutation = async (path, data) => {
     const res = await fetch(`${baseUrl}${path}`, {
         method: 'POST',
