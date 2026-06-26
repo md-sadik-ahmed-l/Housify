@@ -1,3 +1,4 @@
+import { getUserSession } from "@/lib/core/session";
 import {
   Bars,
   CirclePlus,
@@ -5,20 +6,41 @@ import {
   Gear,
   House,
   Magnifier,
+  StarFill,
   Person,
 } from "@gravity-ui/icons";
 import { Button, Drawer } from "@heroui/react";
 import Link from "next/link";
 
-export function DashboardSidebar() {
-  const navItems = [
-    { icon: House, href: "/dashboard/owner", label: "Home" },
+export async function DashboardSidebar() {
+
+  const user = await getUserSession()
+
+const tenantNavLinks = [
+    { icon: House, href: "/dashboard/tenant", label: "Tenant Home" },
+    { icon: Magnifier, href: "/dashboard/tenant/my-bookings", label: "My Bookings" },
+    { icon: StarFill, href: "/dashboard/tenant/favorites", label: "Favorites" },
+    { icon: Person, href: "/dashboard/tenant", label: "Profile" },
+    { icon: Gear, href: "/dashboard/tenant", label: "Settings" },
+  ];
+
+
+const ownerNavLinks = [
+    { icon: House, href: "/dashboard/owner", label: "Owner Home" },
     { icon: Magnifier, href: "/dashboard/owner/properties", label: "My Properties" },
     { icon: CirclePlus, href: "/dashboard/owner/add-property", label: "Add Property" },
     { icon: Envelope, href: "/dashboard/owner/booking-requests", label: "Booking Requests" },
     { icon: Person, href: "/dashboard/owner", label: "Profile" },
     { icon: Gear, href: "/dashboard/owner", label: "Settings" },
   ];
+
+  const navLinksMap = {
+    tenant: tenantNavLinks,
+    owner: ownerNavLinks,
+  }
+
+
+  const navItems = navLinksMap [user?.role || 'tenant']
 
   const navContent = (
     <nav className="flex flex-col gap-1">

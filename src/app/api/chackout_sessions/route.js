@@ -11,6 +11,7 @@ export async function POST(request) {
         const userSession = await auth.api.getSession({
             headers: await headers()
         })
+        
         const user = userSession?.user
 
         if (!user) {

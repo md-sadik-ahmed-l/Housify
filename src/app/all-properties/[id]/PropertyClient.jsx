@@ -42,7 +42,7 @@ const PropertyClient = ({ property, user }) => {
           </p>
         </div>
 
-        <div className="bg-white shadow-lg rounded-2xl p-6 min-w-[300px]">
+        <div className="bg-white shadow-lg rounded-2xl p-6 min-w-[330px]">
           <p className="text-gray-500 text-sm">Yearly Rent</p>
 
           <h2 className="text-4xl font-bold text-blue-600 mt-1">
@@ -51,7 +51,7 @@ const PropertyClient = ({ property, user }) => {
 
           {user?.role === "tenant" && (
             <div className="flex gap-3 mt-5">
-              <FavoriteButton propertyId={property._id} />
+              <FavoriteButton property={property} user={user}/>
 
               <button
                 onClick={() => setOpen(true)}

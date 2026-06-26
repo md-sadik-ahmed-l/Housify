@@ -7,3 +7,13 @@ export const getOwnerBookingProperties = async (ownerId) => {
 
   return res.json();
 };
+
+
+
+export const getTenantBookingProperties = async (userId) => {
+  const res = await fetch(
+    `${baseUrl}/api/tenant-booking/properties?userId=${userId}`,
+  );
+
+  return res.json();
+};

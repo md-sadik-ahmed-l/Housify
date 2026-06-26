@@ -56,7 +56,7 @@ export default async function PaymentSuccess({ searchParams }) {
                     </p>
                     <p className="text-[#ffb77e] text-xl font-bold">${Number(metadata.totalPrice).toLocaleString()}</p>
                     <Link
-                        href={`/dashboard/owner/properties`}
+                        href={`/dashboard/tenant/my-bookings`}
                         className="block mt-4 py-2 px-6 bg-[#ffb77e] text-[#0B1120] font-bold rounded-lg hover:bg-[#ffb77e]/90"
                     >
                         View My Bookings

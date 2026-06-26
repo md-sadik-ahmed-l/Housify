@@ -369,6 +369,6 @@ export default function AddPropertyForm({ user }) {
           </div>
         </Form>
       </div>
-    </div>
+    </div>      
   );
 }
