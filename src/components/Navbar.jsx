@@ -35,8 +35,9 @@ export default function Navbar() {
   ];
 
   const dashboardLinks = {
-    tenant: '/dashboard/tenant',
-    owner: '/dashboard/owner'
+    tenant: '/dashboard/tenant/profile',
+    owner: '/dashboard/owner/profile',
+    admin: '/dashboard/admin/profile'
   }
 
 

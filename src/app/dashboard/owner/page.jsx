@@ -3,7 +3,7 @@ import React from 'react';
 const OwnerDashboardHomePage = () => {
     return (
         <div>
-            <h1>owner</h1>
+            <h1 className='text-5xl'>owner</h1>
         </div>
     );
 };

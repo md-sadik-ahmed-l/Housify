@@ -5,6 +5,7 @@ import {
   Envelope,
   Gear,
   House,
+  CircleDollar,
   Magnifier,
   StarFill,
   Person,
@@ -13,34 +14,68 @@ import { Button, Drawer } from "@heroui/react";
 import Link from "next/link";
 
 export async function DashboardSidebar() {
+  const user = await getUserSession();
 
-  const user = await getUserSession()
-
-const tenantNavLinks = [
-    { icon: House, href: "/dashboard/tenant", label: "Tenant Home" },
-    { icon: Magnifier, href: "/dashboard/tenant/my-bookings", label: "My Bookings" },
+  const tenantNavLinks = [
+    { icon: Person, href: "/dashboard/tenant/profile", label: "Profile" },
+    {
+      icon: Magnifier,
+      href: "/dashboard/tenant/my-bookings",
+      label: "My Bookings",
+    },
     { icon: StarFill, href: "/dashboard/tenant/favorites", label: "Favorites" },
-    { icon: Person, href: "/dashboard/tenant", label: "Profile" },
-    { icon: Gear, href: "/dashboard/tenant", label: "Settings" },
+    { icon: House, href: "/dashboard/tenant", label: "Tenant Home" },
+    { icon: Gear, href: "/dashboard/tenant/settings", label: "Settings" },
   ];
 
-
-const ownerNavLinks = [
-    { icon: House, href: "/dashboard/owner", label: "Owner Home" },
-    { icon: Magnifier, href: "/dashboard/owner/properties", label: "My Properties" },
-    { icon: CirclePlus, href: "/dashboard/owner/add-property", label: "Add Property" },
-    { icon: Envelope, href: "/dashboard/owner/booking-requests", label: "Booking Requests" },
-    { icon: Person, href: "/dashboard/owner", label: "Profile" },
-    { icon: Gear, href: "/dashboard/owner", label: "Settings" },
+  const ownerNavLinks = [
+    { icon: Person, href: "/dashboard/owner/profile", label: "Profile" },
+    {
+      icon: Magnifier,
+      href: "/dashboard/owner/properties",
+      label: "My Properties",
+    },
+    {
+      icon: CirclePlus,
+      href: "/dashboard/owner/add-property",
+      label: "Add Property",
+    },
+    {
+      icon: Envelope,
+      href: "/dashboard/owner/booking-requests",
+      label: "Booking Requests",
+    },
+    { icon: House, href: "/dashboard/owner/owner-analytics", label: "Owner Analytics" },
+    { icon: Gear, href: "/dashboard/owner/settings", label: "Settings" },
+  ];
+  const adminNavLinks = [
+    { icon: Person, href: "/dashboard/admin/profile", label: "Profile" },
+    {
+      icon: Magnifier,
+      href: "/dashboard/admin/all-users",
+      label: "All Users",
+    },
+    {
+      icon: House,
+      href: "/dashboard/admin/all-properties",
+      label: "All Properties",
+    },
+    {
+      icon: Envelope,
+      href: "/dashboard/admin/all-bookings",
+      label: "All Bookings",
+    },
+    { icon: CircleDollar, href: "/dashboard/admin/all-transactions", label: "All Transactions" },
+    { icon: Gear, href: "/dashboard/admin/settings", label: "Settings" },
   ];
 
   const navLinksMap = {
     tenant: tenantNavLinks,
     owner: ownerNavLinks,
-  }
+    admin: adminNavLinks,
+  };
 
-
-  const navItems = navLinksMap [user?.role || 'tenant']
+  const navItems = navLinksMap[user?.role || "tenant"];
 
   const navContent = (
     <nav className="flex flex-col gap-1">
@@ -59,9 +94,9 @@ const ownerNavLinks = [
 
   return (
     <>
-    <aside className="hidden w-64 shrink-0 border-r border-default lg:block p-4 text-white bg-gray-900">
+      <aside className="hidden w-64 shrink-0 border-r border-default lg:block p-4 text-white bg-gray-900">
         {navContent}
-    </aside>
+      </aside>
       <Drawer>
         <Button className="lg:hidden" variant="secondary">
           <Bars />
