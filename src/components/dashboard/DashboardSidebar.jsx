@@ -24,7 +24,7 @@ export async function DashboardSidebar() {
       label: "My Bookings",
     },
     { icon: StarFill, href: "/dashboard/tenant/favorites", label: "Favorites" },
-    { icon: House, href: "/dashboard/tenant", label: "Tenant Home" },
+    // { icon: House, href: "/dashboard/tenant", label: "Tenant Home" },
     { icon: Gear, href: "/dashboard/tenant/settings", label: "Settings" },
   ];
 

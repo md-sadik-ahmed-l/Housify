@@ -49,7 +49,7 @@ export default async function PaymentSuccess({ searchParams }) {
                     <div className="text-5xl">🎉</div>
                     <h1 className="text-2xl font-bold text-white">Booking Confirmed!</h1>
                     <p className="text-[#d9c2b3]">
-                        Confirmation sent to <span className="text-[#ffb77e]">{customer_details?.email}</span>
+                        Confirmation sent to <span className="text-[#ffb77e]">{customer_details?.name}</span>
                     </p>
                     <p className="text-[#d9c2b3]">
                         <span className="text-white font-semibold">{metadata.title}</span>

@@ -1,5 +1,8 @@
 
 
+import { getAllBookingsProfile } from "@/lib/api/booking";
+import { getPropertiesProfile } from "@/lib/api/property";
+import { getAllUsersProfile } from "@/lib/api/users";
 import { getUserSession } from "@/lib/core/session";
 import Image from "next/image";
 
@@ -7,13 +10,11 @@ export default async function AdminProfilePage() {
 
     const user = await getUserSession();
 
-//   const admin = {
-//     name: "John Doe",
-//     email: "admin@gmail.com",
-//     role: "Admin",
-//     joined: "15 June 2026",
-//     image: "https://i.pravatar.cc/300?img=68",
-//   };
+    const totalProperties = await getPropertiesProfile();
+
+    const allUsers = await getAllUsersProfile();
+
+    const allBookings = await getAllBookingsProfile();
 
   const stats = {
     users: 520,
@@ -114,21 +115,21 @@ export default async function AdminProfilePage() {
             <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 text-center">
               <h3 className="text-slate-400">Total Users</h3>
               <p className="text-5xl font-bold text-cyan-400 mt-4">
-                {stats.users}
+                {allUsers?.length}
               </p>
             </div>
 
             <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 text-center">
               <h3 className="text-slate-400">Total Properties</h3>
               <p className="text-5xl font-bold text-green-400 mt-4">
-                {stats.properties}
+                {totalProperties?.length}
               </p>
             </div>
 
             <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 text-center">
               <h3 className="text-slate-400">Total Bookings</h3>
               <p className="text-5xl font-bold text-yellow-400 mt-4">
-                {stats.bookings}
+                {allBookings?.length}
               </p>
             </div>
 
@@ -179,7 +180,7 @@ export default async function AdminProfilePage() {
                     <td>{activity.date}</td>
 
                     <td>
-                      <span className="badge badge-success">
+                      <span className="badge badge-success mt-5 px-3 py-1.5">
                         {activity.status}
                       </span>
                     </td>

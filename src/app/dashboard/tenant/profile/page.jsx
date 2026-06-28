@@ -1,18 +1,25 @@
+import { getTenantBookingProperties } from "@/lib/api/booking";
+import { getFavoriteProperties } from "@/lib/api/favorite";
 import { getUserSession } from "@/lib/core/session";
 import Image from "next/image";
 
 export default async function TenantProfilePage() {
+
   const user = await getUserSession();
 
-  console.log(user);
-
-  //   const user = {
-  //     name: "John Doe",
-  //     email: "john@gmail.com",
-  //     role: "Tenant",
-  //     joined: "15 June 2026",
-  //     image: "https://i.pravatar.cc/300?img=12",
-  //   };
+//   console.log(user);
+  
+    if (!user) {
+      return (
+        <div className="flex items-center justify-center min-h-[50vh]">
+          Please login first
+        </div>
+      );
+    }
+  
+    const bookingsLength = await getTenantBookingProperties(user.id);
+    const tenantUserId = user?.id;
+    const favoriteLength = await getFavoriteProperties(tenantUserId);
 
   const stats = {
     bookings: 12,
@@ -106,7 +113,7 @@ export default async function TenantProfilePage() {
               <h3 className="text-slate-400 text-lg">Total Bookings</h3>
 
               <p className="text-5xl font-bold text-cyan-400 mt-4">
-                {stats.bookings}
+                {bookingsLength?.length}
               </p>
             </div>
 
@@ -114,7 +121,7 @@ export default async function TenantProfilePage() {
               <h3 className="text-slate-400 text-lg">Total Favorites</h3>
 
               <p className="text-5xl font-bold text-pink-400 mt-4">
-                {stats.favorites}
+                {favoriteLength?.length}
               </p>
             </div>
 
@@ -134,7 +141,7 @@ export default async function TenantProfilePage() {
 
           <div className="overflow-x-auto">
             <table className="table w-full">
-              <thead className="bg-slate-800 text-slate-300">
+              <thead className="bg-slate-800 h-15 sm:text-xl text-slate-200">
                 <tr>
                   <th>Property</th>
                   <th>Status</th>
@@ -142,14 +149,14 @@ export default async function TenantProfilePage() {
                 </tr>
               </thead>
 
-              <tbody>
+              <tbody className="">
                 {recentBookings.map((booking, index) => (
-                  <tr key={index} className="hover">
-                    <td>{booking.property}</td>
+                  <tr key={index} className="hover space-y-6 ">
+                    <td className="flex justify-center">{booking.property}</td>
 
-                    <td>
+                    <td >
                       <span
-                        className={`badge ${
+                        className={`badge py-2 px-3 ${
                           booking.status === "Approved"
                             ? "badge-success"
                             : booking.status === "Pending"
@@ -161,7 +168,7 @@ export default async function TenantProfilePage() {
                       </span>
                     </td>
 
-                    <td>{booking.date}</td>
+                    <td >{booking.date}</td>
                   </tr>
                 ))}
               </tbody>
@@ -214,7 +221,7 @@ export default async function TenantProfilePage() {
                   <tr key={index} className="hover">
                     <td>{review.property}</td>
 
-                    <td className="text-yellow-400">
+                    <td className="text-yellow-400 ">
                       {"⭐".repeat(review.rating)}
                     </td>
 

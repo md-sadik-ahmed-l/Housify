@@ -1,16 +1,20 @@
+import { getOwnerBookingProperties } from "@/lib/api/booking";
+import { getOwnerProperties } from "@/lib/api/property";
 import { getUserSession } from "@/lib/core/session";
 import Image from "next/image";
 
 export default async function OwnerProfilePage() {
   const user = await getUserSession();
 
-  //   const owner = {
-  //     name: "John Doe",
-  //     email: "john@gmail.com",
-  //     role: "Owner",
-  //     joined: "15 June 2026",
-  //     image: "https://i.pravatar.cc/300?img=15",
-  //   };
+  if (!user) return <div>Please login first</div>;
+
+  const properties = await getOwnerProperties(user.id);
+
+  const ownerId = user?.id;
+
+  // console.log(ownerId)
+
+  const bookingProperties = await getOwnerBookingProperties(ownerId);
 
   const stats = {
     properties: 15,
@@ -78,7 +82,9 @@ export default async function OwnerProfilePage() {
                 className="rounded-full border-4 border-cyan-500"
               />
 
-              <h2 className="text-2xl sm:text-3xl font-bold mt-5">{user.name}</h2>
+              <h2 className="text-2xl sm:text-3xl font-bold mt-5">
+                {user.name}
+              </h2>
 
               <p className="text-slate-400 sm:text-xl mt-2">{user.email}</p>
 
@@ -104,7 +110,7 @@ export default async function OwnerProfilePage() {
               <h3 className="text-slate-400">Total Properties</h3>
 
               <p className="text-5xl font-bold text-cyan-400 mt-4">
-                {stats.properties}
+                {properties?.length}
               </p>
             </div>
 
@@ -112,7 +118,7 @@ export default async function OwnerProfilePage() {
               <h3 className="text-slate-400">Total Bookings</h3>
 
               <p className="text-5xl font-bold text-green-400 mt-4">
-                {stats.bookings}
+                {bookingProperties?.length}
               </p>
             </div>
 
@@ -192,7 +198,7 @@ export default async function OwnerProfilePage() {
 
                     <td>
                       <span
-                        className={`badge ${
+                        className={`badge mt-5 py-1.5 px-3 ${
                           property.status === "Approved"
                             ? "badge-success"
                             : property.status === "Pending"
