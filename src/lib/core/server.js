@@ -41,3 +41,15 @@ export const serverMutation = async (path, data) => {
 
     return await res.json();
 }
+
+export const serverPatch = async (path, data) => {
+  const res = await fetch(`${baseUrl}${path}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: data ? JSON.stringify(data) : undefined,
+  });
+
+  return await res.json();
+};

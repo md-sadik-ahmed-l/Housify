@@ -37,4 +37,11 @@ export const getOwnerProperties = async (userId) => {
 }
 
 
+export const getFeaturedProperties = async () => {
+
+  return serverFetch(`/api/featured-properties`);
+
+};
+
+
 

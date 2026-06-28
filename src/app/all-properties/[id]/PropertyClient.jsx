@@ -3,7 +3,7 @@
 import BookingModal from "@/components/detailsPage/BookingModal";
 import FavoriteButton from "@/components/detailsPage/FavoriteButton";
 import ReviewSection from "@/components/detailsPage/ReviewSection";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LocationArrowFill } from "@gravity-ui/icons";
 
 const PropertyClient = ({ property, user }) => {
@@ -14,6 +14,26 @@ const PropertyClient = ({ property, user }) => {
   const userRole = user?.role;
 
   console.log(userRole);
+
+  const [alreadyBooked, setAlreadyBooked] = useState(false);
+  const [checking, setChecking] = useState(true);
+
+  useEffect(() => {
+    const checkBooking = async () => {
+      if (!user?.id || !property?._id) return;
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/bookings/check?userId=${user.id}&propertyId=${property._id}`,
+      );
+
+      const data = await res.json();
+
+      setAlreadyBooked(data.booked);
+      setChecking(false);
+    };
+
+    checkBooking();
+  }, [user?.id, property?._id]);
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
@@ -51,13 +71,30 @@ const PropertyClient = ({ property, user }) => {
 
           {user?.role === "tenant" && (
             <div className="flex gap-3 mt-5">
-              <FavoriteButton property={property} user={user}/>
+              <FavoriteButton property={property} user={user} />
 
-              <button
+              {/* <button
                 onClick={() => setOpen(true)}
                 className="flex-1 bg-blue-600 hover:bg-blue-700 transition text-white py-3 rounded-xl font-semibold"
               >
                 Book Property
+              </button> */}
+
+              <button
+                disabled={alreadyBooked || checking}
+                onClick={() => setOpen(true)}
+                className={`flex-1 py-3 rounded-xl font-semibold text-white
+                ${
+                alreadyBooked
+                    ? "bg-gray-500 cursor-not-allowed"
+                    : "bg-blue-600 hover:bg-blue-700"
+                }`}
+              >
+                {checking
+                  ? "Checking..."
+                  : alreadyBooked
+                    ? "Already Booked"
+                    : "Book Property"}
               </button>
             </div>
           )}

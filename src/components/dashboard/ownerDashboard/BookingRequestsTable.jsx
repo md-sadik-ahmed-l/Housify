@@ -1,16 +1,17 @@
 "use client";
 
+import { patchStatusApprove, patchStatusReject } from "@/lib/actions/bookings";
 import { CheckCircle, XCircle, User, CalendarDays, Home } from "lucide-react";
 
 const BookingRequestsTable = ({ bookingProperties }) => {
   const handleApprove = async (id) => {
     try {
-      const res = await fetch(`/api/bookings/${id}/approve`, {
-        method: "PATCH",
-      });
+      const res = await patchStatusApprove(id);
 
-      if (res.ok) {
+      if (res.success) {
         window.location.reload();
+      } else {
+        alert(res.message);
       }
     } catch (error) {
       console.error(error);
@@ -19,20 +20,20 @@ const BookingRequestsTable = ({ bookingProperties }) => {
 
   const handleReject = async (id) => {
     try {
-      const res = await fetch(`/api/bookings/${id}/reject`, {
-        method: "PATCH",
-      });
+      const res = await patchStatusReject(id);
 
-      if (res.ok) {
+      if (res.success) {
         window.location.reload();
+      } else {
+        alert(res.message);
       }
     } catch (error) {
       console.error(error);
     }
   };
 
-  console.log(bookingProperties?.tenantName)
-  console.log(bookingProperties)
+  console.log(bookingProperties?.tenantName);
+  console.log(bookingProperties);
 
   const getStatusStyle = (status) => {
     switch (status) {
@@ -101,8 +102,6 @@ const BookingRequestsTable = ({ bookingProperties }) => {
                   </div>
                 </td>
 
-
-
                 {/* Amount */}
                 <td>
                   <span className="font-bold text-green-600 text-base">
@@ -114,9 +113,8 @@ const BookingRequestsTable = ({ bookingProperties }) => {
                 <td>
                   <div className="flex items-center gap-2 text-gray-300">
                     <CalendarDays size={15} />
-                    {new Date(
-                      booking.moveInDate
-                    ).toLocaleDateString()}
+                    
+                    {new Date(booking.moveInDate).toLocaleDateString("en-GB")}
                   </div>
                 </td>
 
@@ -124,7 +122,7 @@ const BookingRequestsTable = ({ bookingProperties }) => {
                 <td>
                   <span
                     className={`px-3.5 py-2 rounded-full text-sm font-semibold capitalize ${getStatusStyle(
-                      booking.status
+                      booking.status,
                     )}`}
                   >
                     {booking.status}
@@ -136,9 +134,7 @@ const BookingRequestsTable = ({ bookingProperties }) => {
                   {booking.status === "pending" ? (
                     <div className="flex justify-center gap-4">
                       <button
-                        onClick={() =>
-                          handleApprove(booking._id)
-                        }
+                        onClick={() => handleApprove(booking._id)}
                         className="btn flex items-center gap-1 hover:cursor-pointer hover:bg-green-700 px-3 rounded-3xl btn-success btn-xl bg-green-500 text-white font-bold"
                       >
                         <CheckCircle size={16} />
@@ -146,9 +142,7 @@ const BookingRequestsTable = ({ bookingProperties }) => {
                       </button>
 
                       <button
-                        onClick={() =>
-                          handleReject(booking._id)
-                        }
+                        onClick={() => handleReject(booking._id)}
                         className="btn flex items-center px-4 gap-1 hover:cursor-pointer hover:bg-red-700 py-2 rounded-3xl btn-success btn-xl bg-red-500 text-white font-bold"
                       >
                         <XCircle size={16} />
