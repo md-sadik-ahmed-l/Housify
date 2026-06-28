@@ -5,74 +5,74 @@ import RoleModal from "./RoleModal";
 
 const UsersTable = ({ users }) => {
   const [selectedUser, setSelectedUser] = useState(null);
+  const [open, setOpen] = useState(false);
 
-  const openModal = (user) => {
+  const handleOpen = (user) => {
     setSelectedUser(user);
-    document.getElementById("role_modal").showModal();
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedUser(null);
   };
 
   return (
     <>
       <div className="overflow-x-auto rounded-xl border">
         <table className="table w-full">
-          <thead className=" text-2xl bg-gray-700">
+          <thead className="bg-gray-700 text-white">
             <tr className="h-15">
               <th>User</th>
               <th>Email</th>
               <th>Role</th>
               <th>Joined</th>
-              <th></th>
+              <th>Action</th>
             </tr>
           </thead>
 
-          <tbody >
+          <tbody className="">
             {users.map((user) => (
-              <tr key={user._id} >
-                <td>
-                  <div className="flex items-center gap-3 mt-5">
-
-                    <div className="avatar ml-5 py-5">
-                      <div className="w-16 rounded-full">
+              <tr key={user._id}>
+                <td className="">
+                  <div className="flex items-center gap-3 py-3 ">
+                    <div className="avatar ">
+                      <div className="w-20 rounded-full">
                         <img
                           src={
                             user.image ||
                             "https://i.ibb.co/4pDNDk1/avatar.png"
+
                           }
-                          alt=""
+                          alt={user.name}
+                          className="w-full"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <p className="font-semibold text-xl">
-                        {user.name}
-                      </p>
+                      <p className="font-semibold text-xl">{user.name}</p>
                     </div>
-
-                  </div >
+                  </div>
                 </td>
 
-                <td>
-                    <span className="">
-                        {user.email}
-                    </span>
-                </td>
+                <td>{user.email}</td>
 
                 <td>
                   {user.role === "tenant" && (
-                    <span className="badge badge-success py-2 px-3">
+                    <span className="badge badge-success px-4 py-2 text-sm">
                       🟢 Tenant
                     </span>
                   )}
 
                   {user.role === "owner" && (
-                    <span className="badge badge-info py-2 px-4">
+                    <span className="badge badge-info px-4 py-2 text-sm">
                       🔵 Owner
                     </span>
                   )}
 
                   {user.role === "admin" && (
-                    <span className="badge badge-error py-2 px-4">
+                    <span className="badge badge-error px-4 py-2 text-sm">
                       🔴 Admin
                     </span>
                   )}
@@ -80,13 +80,12 @@ const UsersTable = ({ users }) => {
 
                 <td>
                   {new Date(user.createdAt).toLocaleDateString("en-GB")}
-                  
                 </td>
 
                 <td>
                   <button
-                    onClick={() => openModal(user)}
-                    className="btn btn-primary btn-sm"
+                    className="btn btn-primary btn-sm border rounded-full bg-gray-700 hover:bg-gray-500 cursor-pointer px-4 py-2 font-medium"
+                    onClick={() => handleOpen(user)}
                   >
                     Change Role
                   </button>
@@ -98,6 +97,8 @@ const UsersTable = ({ users }) => {
       </div>
 
       <RoleModal
+        open={open}
+        onClose={handleClose}
         selectedUser={selectedUser}
       />
     </>

@@ -1,13 +1,33 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { updateUserRole } from "@/lib/api/users";
 import { toast } from "react-hot-toast";
+import { updateUserRole } from "@/lib/api/users";
 
-const RoleModal = ({ selectedUser }) => {
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+} from "@heroui/modal";
+
+import { Button } from "@heroui/button";
+
+import { RadioGroup, Radio } from "@heroui/radio";
+
+const RoleModal = ({
+  open,
+  onClose,
+  selectedUser,
+}) => {
   const [role, setRole] = useState("");
 
-  if (!selectedUser) return null;
+  useEffect(() => {
+    if (selectedUser) {
+      setRole(selectedUser.role);
+    }
+  }, [selectedUser]);
 
   const handleSubmit = async () => {
     try {
@@ -15,7 +35,7 @@ const RoleModal = ({ selectedUser }) => {
 
       toast.success("Role updated successfully");
 
-      document.getElementById("role_modal").close();
+      onClose();
 
       window.location.reload();
     } catch (err) {
@@ -23,87 +43,82 @@ const RoleModal = ({ selectedUser }) => {
     }
   };
 
-//   const [role, setRole] = useState("");
-
-//   useEffect(() => {
-//     if (selectedUser) {
-//       setRole(selectedUser.role);
-//     }
-//   }, [selectedUser]);
+  if (!selectedUser) return null;
 
   return (
-    <dialog id="role_modal" className="modal">
-      <div className="modal-box">
-        <h3 className="font-bold text-xl">Change User Role</h3>
+    <Modal
+      isOpen={open}
+      onOpenChange={(isOpen) => {
+        if (!isOpen) onClose();
+      }}
+      placement="center"
+    >
+      <ModalContent className="text-white border bg-gray-800 rounded-2xl">
+        <ModalHeader className="text-2xl">
+          Change User Role
+        </ModalHeader>
 
-        <div className="mt-5 space-y-5">
-          <div>
-            <p className="font-semibold">{selectedUser.name}</p>
+        <ModalBody>
+          <div className="space-y-5">
+            <div>
+              <h3 className="font-semibold text-lg">
+                {selectedUser.name}
+              </h3>
 
-            <p className="text-sm text-gray-500">{selectedUser.email}</p>
-          </div>
-
-          <div>
-            <p className="font-medium">Current Role :</p>
-
-            <p className="capitalize">{selectedUser.role}</p>
-          </div>
-
-          <div>
-            <p className="font-medium mb-2">Select New Role</p>
-
-            <div className="space-y-2">
-              <label className="flex gap-2 items-center cursor-pointer">
-                <input
-                  type="radio"
-                  name="role"
-                  value="tenant"
-                  checked={role === "tenant"}
-                  onChange={(e) => setRole(e.target.value)}
-                />
-                Tenant
-              </label>
-
-              <label className="flex gap-2 items-center cursor-pointer">
-                <input
-                  type="radio"
-                  name="role"
-                  value="owner"
-                  checked={role === "owner"}
-                  onChange={(e) => setRole(e.target.value)}
-                />
-                Owner
-              </label>
-
-              <label className="flex gap-2 items-center cursor-pointer">
-                <input
-                  type="radio"
-                  name="role"
-                  value="admin"
-                  checked={role === "admin"}
-                  onChange={(e) => setRole(e.target.value)}
-                />
-                Admin
-              </label>
+              <p className="text-sm text-gray-500">
+                {selectedUser.email}
+              </p>
             </div>
+
+            <div>
+              <p className="font-semibold">
+                Current Role
+              </p>
+
+              <p className="capitalize">
+                {selectedUser.role}
+              </p>
+            </div>
+
+            <RadioGroup
+              label="Select New Role"
+              value={role}
+              onValueChange={setRole}
+            >
+              <Radio value="tenant" className="text-xl">
+                Tenant
+              </Radio>
+
+              <Radio value="owner" className="text-xl">
+                Owner
+              </Radio>
+            </RadioGroup>
           </div>
-        </div>
+        </ModalBody>
 
-        <div className="modal-action">
-          <form method="dialog">
-            <button className="btn">Cancel</button>
-          </form>
-
-          <button
-            onClick={handleSubmit}
-            className="btn btn-primary"
-            disabled={!role || role === selectedUser.role}
+        <ModalFooter>
+          <Button
+            variant="light"
+            onPress={onClose}
+            className="border rounded-2xl cursor-pointer hover:bg-gray-500 hover:shadow-2xl"
           >
-            Update
-          </button>
-        </div>
-      </div>
-    </dialog>
+            Cancel
+          </Button>
+
+          <Button
+            color="primary"
+            onPress={handleSubmit}
+            isDisabled={
+              !role ||
+              role === selectedUser.role
+            }
+            className="border rounded-2xl cursor-pointer hover:bg-gray-500"
+          >
+            Update Role
+          </Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
   );
 };
 
