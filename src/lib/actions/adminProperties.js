@@ -10,6 +10,13 @@ import { serverDelete, serverPatch } from "../core/server";
 // }
 
 
+export const deleteAdminBookings = async (id) => {
+    return serverDelete(`/api/admin/bookings/${id}/delete` );
+}
+
+
+
+
 export const deleteAdminStatus = async (id) => {
     return serverDelete(`/api/admin/post-request/${id}/delete` );
 }

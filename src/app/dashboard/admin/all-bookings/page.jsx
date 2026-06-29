@@ -1,26 +1,34 @@
 
-import AllBookingsTable from "@/components/dashboard/adminDashboard/AllBookingsTable";
-import { getAdminBookingsProperties } from "@/lib/api/booking";
 
+import AllBookingsTable from "@/components/dashboard/adminDashboard/AllBookingsTable";
+import { getAdminAllBookings } from "@/lib/api/adminProperties";
+
+
+import { getUserSession } from "@/lib/core/session";
 import React from "react";
 
 const BookingRequestsPage = async () => {
 
+  const user = await getUserSession();
 
-  const bookingProperties = await getAdminBookingsProperties();
+  if (!user) return <div>Please login first</div>;
 
-  console.log(bookingProperties);
+  
+
+  const bookingsProperties = await getAdminAllBookings();
+
+  console.log(bookingsProperties);
 
   return (
     <div className="max-w-6xl mx-auto space-y-7 my-15">
       <div>
-        <h1 className="text-2xl sm:text-4xl font-bold">Booking Details</h1>
+        <h1 className="text-2xl sm:text-4xl font-bold">All Properties</h1>
         <p className="text-gray-400 mt-1">
-          Manage booking details for your website.
+          Manage properties post requests for your website.
         </p>
       </div>
 
-      <AllBookingsTable bookingProperties={bookingProperties} />
+      <AllBookingsTable postProperties={bookingsProperties} />
     </div>
   );
 };

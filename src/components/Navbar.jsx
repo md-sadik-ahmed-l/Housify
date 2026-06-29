@@ -28,6 +28,7 @@ export default function Navbar() {
       label: "Browse Properties",
       href: "/all-properties",
     },
+    
     {
       label: "Services",
       href: "/services",
