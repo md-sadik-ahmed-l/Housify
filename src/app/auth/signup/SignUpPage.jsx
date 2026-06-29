@@ -1,0 +1,326 @@
+"use client";
+
+import { useState } from "react";
+import {
+  Card,
+  Button,
+  Link,
+  TextField,
+  Label,
+  InputGroup,
+  Input,
+} from "@heroui/react";
+import { Radio, RadioGroup } from "@heroui/react";
+import {
+  Eye,
+  EyeSlash,
+  Person,
+  CopyPicture,
+  At,
+  ShieldKeyhole,
+} from "@gravity-ui/icons";
+import { signUp } from "@/lib/auth-client";
+import { useRouter, useSearchParams } from "next/navigation";
+
+export default function SignupPage() {
+  const [name, setName] = useState("");
+  const [image, setImage] = useState(null);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState("tenant");
+
+  const [isVisible, setIsVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get("redirect") || "/";
+
+  const toggleVisibility = () => setIsVisible(!isVisible);
+
+  // Upload image to ImgBB
+  const uploadImage = async (imageFile) => {
+    const formData = new FormData();
+
+    formData.append("image", imageFile);
+
+    const response = await fetch(
+      `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMAGE_UPLOAD_API}`,
+      {
+        method: "POST",
+        body: formData,
+      },
+    );
+
+    const data = await response.json();
+
+    if (!data.success) {
+      throw new Error("Image upload failed");
+    }
+
+    return data.data.url;
+  };
+
+  const handleSignup = async (e) => {
+    e.preventDefault();
+
+    setError("");
+    setSuccess("");
+    setIsLoading(true);
+
+    try {
+      let imageUrl = "";
+
+      if (image) {
+        imageUrl = await uploadImage(image);
+      }
+      console.log(image);
+
+      const { error: authError } = await signUp.email({
+        name,
+        email,
+        password,
+        image: imageUrl,
+        role,
+      });
+
+      if (authError) {
+        setError(authError.message || "Signup failed");
+        return;
+      }
+
+      setSuccess("Account created successfully!");
+
+      setName("");
+      setEmail("");
+      setPassword("");
+      setImage(null);
+      setRole("tenant");
+
+      router.push(redirectTo);
+    } catch (err) {
+      console.error(err);
+      setError(err.message || "Something went wrong");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-zinc-50 dark:bg-zinc-950 px-4">
+      <Card className="w-full max-w-md p-6 shadow-sm border border-zinc-200 dark:border-zinc-800">
+        {/* Header Container */}
+        <div className="flex flex-col items-center justify-center gap-1 pb-6 border-b border-zinc-100 dark:border-zinc-800 mb-6 text-center">
+          <h1 className="text-2xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50">
+            Create an account
+          </h1>
+          <p className="text-sm text-zinc-600 dark:text-zinc-400">
+            Fill in the fields below to get started
+          </p>
+        </div>
+
+        {/* Form Body */}
+        <form onSubmit={handleSignup} className="flex flex-col gap-5">
+          {/* Name Field */}
+          <TextField isRequired name="name" className="flex flex-col gap-1.5">
+            <Label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+              Name
+            </Label>
+            <InputGroup className="flex items-center gap-2 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 bg-zinc-50 dark:bg-zinc-900 focus-within:border-primary transition-colors">
+              <Person className="text-zinc-400 pointer-events-none" size={16} />
+              <Input
+                type="text"
+                placeholder="Enter your full name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full bg-transparent py-2 text-sm outline-none border-none text-zinc-900 dark:text-zinc-100"
+              />
+            </InputGroup>
+          </TextField>
+
+          {/* Image Field */}
+
+          <TextField isRequired>
+            <Label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+              Profile Image
+            </Label>
+            <div className="flex items-center gap-2 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 bg-zinc-50 dark:bg-zinc-900 py-2">
+              <CopyPicture
+                className="text-zinc-400 pointer-events-none"
+                size={16}
+              />
+              <input
+                type="file"
+                accept="image/png, image/jpeg, image/jpg"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  setImage(file || null);
+                }}
+                className="w-full bg-transparent text-sm outline-none border-none text-zinc-900 dark:text-zinc-100 file:mr-3 file:rounded-md file:border-0 file:bg-zinc-200 dark:file:bg-zinc-800 file:py-1.5 file:px-3 file:text-xs file:font-medium file:text-zinc-700 dark:file:text-zinc-200"
+              />
+            </div>
+            {image && (
+              <p className="text-xs text-zinc-500 mt-1">
+                Selected: {image.name}
+              </p>
+            )}
+          </TextField>
+
+          {/* <TextField isRequired>
+            <Label>Profile Image</Label>
+
+            <InputGroup className="flex items-center gap-2 border rounded-xl pl-3">
+              <CopyPicture
+                className="text-zinc-400 pointer-events-none"
+                size={16}
+              />
+              <Input
+                type="file"
+                // accept="image/png, image/jpeg, image/jpg"
+                // onChange={(e) => setImage(e.target.files?.[0] || null)}
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  setImage(file || null);
+                }}
+                
+              />
+            </InputGroup>
+          </TextField> */}
+
+          {/* <div class="mx-auto max-w-xs">
+            <label
+              for="example1"
+              class="mb-1 block text-sm font-medium text-gray-700"
+            >
+              Upload file
+            </label>
+            <input
+              id="example1"
+              type="file"
+              class="mt-2 block w-full text-sm file:mr-4 file:rounded-md file:border-0 file:bg-teal-500 file:py-2 file:px-4 file:text-sm file:font-semibold file:text-white hover:file:bg-teal-700 focus:outline-none disabled:pointer-events-none disabled:opacity-60"
+            />
+          </div> */}
+
+          {/* Email Field */}
+
+          <TextField
+            isRequired
+            name="email"
+            type="email"
+            className="flex flex-col gap-1.5"
+          >
+            <Label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+              Email Address
+            </Label>
+            <InputGroup className="flex items-center gap-2 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 bg-zinc-50 dark:bg-zinc-900 focus-within:border-primary transition-colors">
+              <At className="text-zinc-400 pointer-events-none" size={16} />
+              <Input
+                placeholder="you@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full bg-transparent py-2 text-sm outline-none border-none text-zinc-900 dark:text-zinc-100"
+              />
+            </InputGroup>
+          </TextField>
+
+          {/* Password Field */}
+          <TextField
+            isRequired
+            name="password"
+            className="flex flex-col gap-1.5"
+          >
+            <Label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+              Password
+            </Label>
+            <InputGroup className="flex items-center gap-2 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 bg-zinc-50 dark:bg-zinc-900 focus-within:border-primary transition-colors">
+              <ShieldKeyhole
+                className="text-zinc-400 pointer-events-none"
+                size={16}
+              />
+              <Input
+                type={isVisible ? "text" : "password"}
+                placeholder="Choose a password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full bg-transparent py-2 text-sm outline-none border-none text-zinc-900 dark:text-zinc-100"
+              />
+              <button
+                className="focus:outline-none text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition"
+                type="button"
+                onClick={toggleVisibility}
+                aria-label="toggle password visibility"
+              >
+                {isVisible ? <EyeSlash size={18} /> : <Eye size={18} />}
+              </button>
+            </InputGroup>
+          </TextField>
+
+          <div className="flex flex-col gap-4">
+            <Label>Select your role</Label>
+            <RadioGroup
+              defaultValue="tenant"
+              name="role"
+              onChange={(value) => setRole(value)}
+              orientation="horizontal"
+            >
+              <Radio value="tenant">
+                <Radio.Control>
+                  <Radio.Indicator />
+                </Radio.Control>
+                <Radio.Content>
+                  <Label>Tenant</Label>
+                </Radio.Content>
+              </Radio>
+
+              <Radio value="owner">
+                <Radio.Control>
+                  <Radio.Indicator />
+                </Radio.Control>
+                <Radio.Content>
+                  <Label>Owner</Label>
+                </Radio.Content>
+              </Radio>
+            </RadioGroup>
+          </div>
+
+          {/* Dynamic Status Badges */}
+          {error && (
+            <div className="p-3.5 text-xs font-medium rounded-xl bg-red-100/60 dark:bg-red-950/50 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-900">
+              <span className="font-semibold">Error:</span> {error}
+            </div>
+          )}
+
+          {success && (
+            <div className="p-3.5 text-xs font-medium rounded-xl bg-emerald-100/60 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-900">
+              <span className="font-semibold">Success:</span> {success}
+            </div>
+          )}
+
+          {/* Action Button */}
+          <Button
+            type="submit"
+            color="primary"
+            className="w-full font-semibold rounded-xl text-sm h-12"
+            isLoading={isLoading}
+            isDisabled={isLoading}
+          >
+            Sign Up
+          </Button>
+
+          {/* Navigation Option */}
+          <div className="text-center pt-4 border-t border-zinc-100 dark:border-zinc-800 mt-2 text-md text-zinc-600 dark:text-zinc-400">
+            Already have an account?{" "}
+            <Link
+              href={`/auth/signin?redirect=${redirectTo}`}
+              className="font-medium cursor-pointer text-xl text-blue-600 dark:text-blue-400"
+            >
+              Sign in instead
+            </Link>
+          </div>
+        </form>
+      </Card>
+    </div>
+  );
+}
