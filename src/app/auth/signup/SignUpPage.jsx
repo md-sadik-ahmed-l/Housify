@@ -114,14 +114,7 @@ export default function SignupPage() {
       provider: "google",
     });
 
-    if (error) {
-    toast.error(error.message);
-    return;
-  }
   
-    if (data) {
-      toast.success("Register success full");
-    }
     router.push("/");
   };
 
