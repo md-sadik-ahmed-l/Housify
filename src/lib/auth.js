@@ -19,5 +19,27 @@ export const auth = betterAuth({
         default: "tenant"
       }
     }
-  }
+  },
+
+  databaseHooks: {
+    user: {
+      create: {
+        before: async (user) => {
+          return {
+            data: {
+              ...user,
+              role: "tenant",
+            },
+          };
+        },
+      },
+    },
+  },
+
+  socialProviders: {
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    },
+  },
 });

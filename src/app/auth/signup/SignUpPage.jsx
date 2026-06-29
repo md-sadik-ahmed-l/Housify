@@ -19,8 +19,9 @@ import {
   At,
   ShieldKeyhole,
 } from "@gravity-ui/icons";
-import { signUp } from "@/lib/auth-client";
+import { authClient, signUp } from "@/lib/auth-client";
 import { useRouter, useSearchParams } from "next/navigation";
+import { FcGoogle } from "react-icons/fc";
 
 export default function SignupPage() {
   const [name, setName] = useState("");
@@ -108,11 +109,27 @@ export default function SignupPage() {
     }
   };
 
+  const handleSignIn = async () => {
+    await authClient.signIn.social({
+      provider: "google",
+    });
+
+    if (error) {
+    toast.error(error.message);
+    return;
+  }
+  
+    if (data) {
+      toast.success("Register success full");
+    }
+    router.push("/");
+  };
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 dark:bg-zinc-950 px-4">
       <Card className="w-full max-w-md p-6 shadow-sm border border-zinc-200 dark:border-zinc-800">
         {/* Header Container */}
-        <div className="flex flex-col items-center justify-center gap-1 pb-6 border-b border-zinc-100 dark:border-zinc-800 mb-6 text-center">
+        <div className="flex flex-col items-center justify-center gap-1 pb-2 border-b border-zinc-100 dark:border-zinc-800 mb-3 text-center">
           <h1 className="text-2xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50">
             Create an account
           </h1>
@@ -122,7 +139,7 @@ export default function SignupPage() {
         </div>
 
         {/* Form Body */}
-        <form onSubmit={handleSignup} className="flex flex-col gap-5">
+        <form onSubmit={handleSignup} className="flex flex-col gap-3">
           {/* Name Field */}
           <TextField isRequired name="name" className="flex flex-col gap-1.5">
             <Label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
@@ -168,40 +185,7 @@ export default function SignupPage() {
             )}
           </TextField>
 
-          {/* <TextField isRequired>
-            <Label>Profile Image</Label>
-
-            <InputGroup className="flex items-center gap-2 border rounded-xl pl-3">
-              <CopyPicture
-                className="text-zinc-400 pointer-events-none"
-                size={16}
-              />
-              <Input
-                type="file"
-                // accept="image/png, image/jpeg, image/jpg"
-                // onChange={(e) => setImage(e.target.files?.[0] || null)}
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  setImage(file || null);
-                }}
-                
-              />
-            </InputGroup>
-          </TextField> */}
-
-          {/* <div class="mx-auto max-w-xs">
-            <label
-              for="example1"
-              class="mb-1 block text-sm font-medium text-gray-700"
-            >
-              Upload file
-            </label>
-            <input
-              id="example1"
-              type="file"
-              class="mt-2 block w-full text-sm file:mr-4 file:rounded-md file:border-0 file:bg-teal-500 file:py-2 file:px-4 file:text-sm file:font-semibold file:text-white hover:file:bg-teal-700 focus:outline-none disabled:pointer-events-none disabled:opacity-60"
-            />
-          </div> */}
+        
 
           {/* Email Field */}
 
@@ -309,8 +293,21 @@ export default function SignupPage() {
             Sign Up
           </Button>
 
-          {/* Navigation Option */}
-          <div className="text-center pt-4 border-t border-zinc-100 dark:border-zinc-800 mt-2 text-md text-zinc-600 dark:text-zinc-400">
+      
+        </form>
+        <div className="w-full mt-2 space-y-2">
+          <h1 className="text-center">Or</h1>
+
+          <Button
+            onClick={handleSignIn}
+            variant="outline"
+            className="w-full py-6 "
+          >
+            <FcGoogle size={22} />
+            Sign in with Google
+          </Button>
+
+           <div className="text-center pt-2 border-t border-zinc-100 dark:border-zinc-800 mt-2 text-md text-zinc-600 dark:text-zinc-400">
             Already have an account?{" "}
             <Link
               href={`/auth/signin?redirect=${redirectTo}`}
@@ -319,7 +316,7 @@ export default function SignupPage() {
               Sign in instead
             </Link>
           </div>
-        </form>
+        </div>
       </Card>
     </div>
   );
