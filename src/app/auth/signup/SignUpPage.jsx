@@ -22,6 +22,7 @@ import {
 import { authClient, signUp } from "@/lib/auth-client";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
+import { toast } from "react-toastify";
 
 export default function SignupPage() {
   const [name, setName] = useState("");
@@ -109,23 +110,20 @@ export default function SignupPage() {
     }
   };
 
-  
   const handleSignIn = async () => {
-    
-    const {data, error} = await authClient.signIn.social({
-
+    const { data, error } = await authClient.signIn.social({
       provider: "google",
     });
 
-    console.log(data, error)
+    console.log(data, error);
     if (error) {
-    toast.error(error.message);
-    return;
-  }
-  
-    // if (data) {
-    //   toast.success("Register success full");
-    // }
+      toast.error(error.message);
+      return;
+    }
+
+    if (data) {
+      toast.success("Register success full");
+    }
     router.push("/");
   };
 
@@ -188,8 +186,6 @@ export default function SignupPage() {
               </p>
             )}
           </TextField>
-
-        
 
           {/* Email Field */}
 
@@ -296,8 +292,6 @@ export default function SignupPage() {
           >
             Sign Up
           </Button>
-
-      
         </form>
         <div className="w-full mt-2 space-y-2">
           <h1 className="text-center">Or</h1>
@@ -311,7 +305,7 @@ export default function SignupPage() {
             Sign in with Google
           </Button>
 
-           <div className="text-center pt-2 border-t border-zinc-100 dark:border-zinc-800 mt-2 text-md text-zinc-600 dark:text-zinc-400">
+          <div className="text-center pt-2 border-t border-zinc-100 dark:border-zinc-800 mt-2 text-md text-zinc-600 dark:text-zinc-400">
             Already have an account?{" "}
             <Link
               href={`/auth/signin?redirect=${redirectTo}`}

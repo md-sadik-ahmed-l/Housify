@@ -14,6 +14,7 @@ import { Eye, EyeSlash, At, ShieldKeyhole } from "@gravity-ui/icons";
 import { FcGoogle } from "react-icons/fc";
 import { authClient, signIn } from "@/lib/auth-client";
 import { useRouter, useSearchParams } from "next/navigation";
+import { toast } from "react-toastify";
 
 export default function SigninPage() {
   // Form fields
@@ -61,13 +62,18 @@ export default function SigninPage() {
   };
 
   const handleSignIn = async () => {
-    await authClient.signIn.social({
+    const {data, error} =await authClient.signIn.social({
       provider: "google",
     });
 
-    // if (data) {
-    //   toast.success("Register success full");
-    // }
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+
+    if (data) {
+      toast.success("Register success full");
+    }
     router.push("/");
   };
 
