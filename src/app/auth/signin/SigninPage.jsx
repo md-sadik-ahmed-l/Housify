@@ -16,8 +16,9 @@ import { authClient, signIn } from "@/lib/auth-client";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
 
+
 export default function SigninPage() {
-  // Form fields
+ 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -25,7 +26,7 @@ export default function SigninPage() {
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("redirect") || "/";
 
-  // UI States
+  
   const [isVisible, setIsVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
