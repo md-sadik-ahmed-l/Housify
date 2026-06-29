@@ -102,14 +102,14 @@ export async function DashboardSidebar() {
           <Bars />
           Sidebar
         </Button>
-        <Drawer.Backdrop>
+        <Drawer.Backdrop >
           <Drawer.Content placement="left">
-            <Drawer.Dialog>
+            <Drawer.Dialog  className="bg-gray-900">
               <Drawer.CloseTrigger />
               <Drawer.Header>
-                <Drawer.Heading>Navigation</Drawer.Heading>
+                <Drawer.Heading  className="text-white">Navigation</Drawer.Heading>
               </Drawer.Header>
-              <Drawer.Body>{navContent}</Drawer.Body>
+              <Drawer.Body  >{navContent}</Drawer.Body>
             </Drawer.Dialog>
           </Drawer.Content>
         </Drawer.Backdrop>

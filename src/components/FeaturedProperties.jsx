@@ -26,7 +26,7 @@ const FeaturedProperties = ({ featuredProperties }) => {
                 src={property.image}
                 alt={property.title}
                 width={500}
-                height={350}
+                height={500}
                 className="w-full h-60 object-cover"
               />
 
