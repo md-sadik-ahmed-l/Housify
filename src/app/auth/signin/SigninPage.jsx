@@ -65,7 +65,9 @@ export default function SigninPage() {
       provider: "google",
     });
 
-    
+    // if (data) {
+    //   toast.success("Register success full");
+    // }
     router.push("/");
   };
 

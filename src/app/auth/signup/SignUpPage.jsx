@@ -109,12 +109,23 @@ export default function SignupPage() {
     }
   };
 
+  
   const handleSignIn = async () => {
-    await authClient.signIn.social({
+    
+    const {data, error} = await authClient.signIn.social({
+
       provider: "google",
     });
 
+    console.log(data, error)
+    if (error) {
+    toast.error(error.message);
+    return;
+  }
   
+    // if (data) {
+    //   toast.success("Register success full");
+    // }
     router.push("/");
   };
 
