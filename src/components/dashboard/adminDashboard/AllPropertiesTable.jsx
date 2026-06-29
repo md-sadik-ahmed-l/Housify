@@ -1,286 +1,194 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import toast from "react-hot-toast";
+// import { patchStatusApprove, patchStatusReject } from "@/lib/actions/bookings";
+import { CheckCircle, XCircle, User, CalendarDays, Home, } from "lucide-react";
+import {TrashBin} from '@gravity-ui/icons';
+import { deleteAdminStatus, patchAdminStatusApprove, patchAdminStatusReject } from "@/lib/actions/adminProperties";
 
-import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
-  Button,
-  Chip,
-  Spinner,
-  Avatar,
-} from "@heroui/react";
+const AllPropertiesTable = ({ postProperties }) => {
 
-import { getAllProperties, approveProperty } from "@/lib/api/adminProperties";
 
-import RejectPropertyModal from "./RejectPropertyModal";
-import UpdatePropertyModal from "./UpdatePropertyModal";
-import DeletePropertyModal from "./DeletePropertyModal";
-
-const columns = [
-  { name: "IMAGE", uid: "image" },
-  { name: "PROPERTY", uid: "property" },
-  { name: "OWNER", uid: "owner" },
-  { name: "LOCATION", uid: "location" },
-  { name: "TYPE", uid: "type" },
-  { name: "RENT", uid: "rent" },
-  { name: "STATUS", uid: "status" },
-  { name: "ACTION", uid: "action" },
-];
-
-const AllPropertiesTable = () => {
-  const [properties, setProperties] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  const [selectedProperty, setSelectedProperty] = useState(null);
-
-  const [rejectOpen, setRejectOpen] = useState(false);
-  const [updateOpen, setUpdateOpen] = useState(false);
-  const [deleteOpen, setDeleteOpen] = useState(false);
-
-  // -------------------------
-  // Load Properties
-  // -------------------------
-
-  const loadProperties = async () => {
+    const handleDelete = async (_id) => {
     try {
-      setLoading(true);
+      const res = await deleteAdminStatus(_id);
 
-      const data = await getAllProperties();
-
-      setProperties(data);
+      if (res.success) {
+        window.location.reload();
+      } else {
+        alert(res.message);
+      }
     } catch (error) {
       console.error(error);
-
-      toast.error("Failed to load properties");
-    } finally {
-      setLoading(false);
     }
   };
 
-  useEffect(() => {
-    loadProperties();
-  }, []);
-
-  // -------------------------
-  // Approve Property
-  // -------------------------
-
-  const handleApprove = async (id) => {
+  const handleApprove = async (_id) => {
     try {
-      await approveProperty(id);
+      const res = await patchAdminStatusApprove(_id);
 
-      toast.success("Property Approved");
-
-      loadProperties();
+      if (res.success) {
+        window.location.reload();
+      } else {
+        alert(res.message);
+      }
     } catch (error) {
       console.error(error);
-
-      toast.error("Approval Failed");
     }
   };
 
-  // -------------------------
-  // Status Badge
-  // -------------------------
+  const handleReject = async (_id) => {
+    try {
+      const res = await patchAdminStatusReject(_id);
 
-  const renderStatus = (status) => {
-    switch (status) {
-      case "Approved":
-        return (
-          <Chip color="success" variant="flat">
-            Approved
-          </Chip>
-        );
-
-      case "Rejected":
-        return (
-          <Chip color="danger" variant="flat">
-            Rejected
-          </Chip>
-        );
-
-      default:
-        return (
-          <Chip color="warning" variant="flat">
-            Pending
-          </Chip>
-        );
+      if (res.success) {
+        window.location.reload();
+      } else {
+        alert(res.message);
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
-  const rows = useMemo(() => properties, [properties]);
+  
 
-  if (loading) {
-    return (
-      <div className="flex justify-center py-20">
-        <Spinner size="lg" />
-      </div>
-    );
-  } // -------------------------
-  // Render Cell
-  // -------------------------
-
-  const renderCell = (property, columnKey) => {
-    switch (columnKey) {
-      case "image":
-        return (
-          <Avatar src={property.image} radius="md" className="w-14 h-14" />
-        );
-
-      case "property":
-        return (
-          <div className="flex flex-col">
-            <p className="font-semibold">{property.title}</p>
-
-            <p className="text-xs text-default-500">{property._id}</p>
-          </div>
-        );
-
-      case "owner":
-        return (
-          <div className="flex flex-col">
-            <p className="font-medium">{property.ownerName}</p>
-
-            <p className="text-xs text-default-500">{property.ownerEmail}</p>
-          </div>
-        );
-
-      case "location":
-        return property.location;
-
-      case "type":
-        return property.propertyType;
-
-      case "rent":
-        return `$${property.rent}`;
-
-      case "status":
-        return renderStatus(property.status);
-
-      case "action":
-        return (
-          <div className="flex flex-wrap gap-2">
-            {/* Approve */}
-
-            <Button
-              size="sm"
-              color="success"
-              variant="flat"
-              isDisabled={property.status === "Approved"}
-              onPress={() => handleApprove(property._id)}
-            >
-              Approve
-            </Button>
-
-            {/* Reject */}
-
-            <Button
-              size="sm"
-              color="warning"
-              variant="flat"
-              onPress={() => {
-                setSelectedProperty(property);
-                setRejectOpen(true);
-              }}
-            >
-              Reject
-            </Button>
-
-            {/* Update */}
-
-            <Button
-              size="sm"
-              color="primary"
-              variant="flat"
-              onPress={() => {
-                setSelectedProperty(property);
-                setUpdateOpen(true);
-              }}
-            >
-              Update
-            </Button>
-
-            {/* Delete */}
-
-            <Button
-              size="sm"
-              color="danger"
-              variant="flat"
-              onPress={() => {
-                setSelectedProperty(property);
-                setDeleteOpen(true);
-              }}
-            >
-              Delete
-            </Button>
-          </div>
-        );
-
-      default:
-        return property[columnKey];
-    }
-  };
-
-  // -------------------------
-  // Return
-  // -------------------------
+ 
 
   return (
-    <>
-      <Table aria-label="All Properties Table" removeWrapper>
-        <TableHeader columns={columns}>
-          {(column) => (
-            <TableColumn key={column.uid}>{column.name}</TableColumn>
-          )}
-        </TableHeader>
+    <div className=" rounded-3xl shadow-lg border border-gray-100 overflow-hidden">
+      {/* Header */}
+      <div className="bg-gradient-to-r from-primary to-secondary text-white p-6">
+        <h2 className="text-2xl font-bold">Properties Post Requests</h2>
+        <p className="text-sm opacity-90 mt-1">
+          Manage Owner post requests for your website.
+        </p>
+      </div>
 
-        <TableBody items={rows} emptyContent="No properties found.">
-          {(item) => (
-            <TableRow key={item._id}>
-              {(columnKey) => (
-                <TableCell>{renderCell(item, columnKey)}</TableCell>
-              )}
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>{" "}
-      {/* Reject Modal */}
-      <RejectPropertyModal
-        isOpen={rejectOpen}
-        onOpenChange={setRejectOpen}
-        property={selectedProperty}
-        onSuccess={() => {
-          setRejectOpen(false);
-          loadProperties();
-        }}
-      />
-      {/* Update Modal */}
-      <UpdatePropertyModal
-        isOpen={updateOpen}
-        onOpenChange={setUpdateOpen}
-        property={selectedProperty}
-        onSuccess={() => {
-          setUpdateOpen(false);
-          loadProperties();
-        }}
-      />
-      {/* Delete Modal */}
-      <DeletePropertyModal
-        isOpen={deleteOpen}
-        onOpenChange={setDeleteOpen}
-        property={selectedProperty}
-        onSuccess={() => {
-          setDeleteOpen(false);
-          loadProperties();
-        }}
-      />
-    </>
+      {/* Table */}
+      <div className="">
+        <table className="table w-full ">
+          <thead className="bg-gray-600 h-13">
+            <tr className="text-white text-sm sm:text-xl">
+              <th>Owner</th>
+              <th>Property</th>
+              <th>Amount</th>
+              <th>Create Date</th>
+              <th>Delete</th>
+              <th className="text-center">Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {postProperties?.map((propertyRequest) => (
+              <tr
+                key={propertyRequest?._id}
+                className=" transition-colors border-b h-25 "
+              >
+                {/* Tenant */}
+                <td>
+                  <div className="flex items-center gap-3">
+                    <div className="w-11 ml-2 h-11 rounded-full bg-gray-600 flex items-center justify-center">
+                      <User size={27} className="text-primary " />
+                    </div>
+
+                    <div>
+                      <p className="font-semibold text-xl text-gray-300">
+                        {propertyRequest?.tenantName}
+                      </p>
+                      <p className="text-xs text-gray-300 truncate max-w-[180px]">
+                        {propertyRequest?.userId}
+                      </p>
+                    </div>
+                  </div>
+                </td>
+
+                {/* Property */}
+                <td>
+                  <div className="flex items-center gap-2">
+                    <Home size={16} className="text-primary" />
+                    <span className="font-medium">{propertyRequest.title}</span>
+                  </div>
+                </td>
+
+                {/* Amount */}
+                <td>
+                  <span className="font-bold text-green-600 text-base">
+                    $ {propertyRequest.price?.toLocaleString()}
+                  </span>
+                </td>
+
+                {/* Date */}
+                <td>
+                  <div className="flex items-center gap-2 text-gray-300">
+                    <CalendarDays size={15} />
+                    
+                    {new Date(propertyRequest.createdAt).toLocaleDateString("en-GB")}
+                  </div>
+                </td>
+
+                {/* Status */}
+                <td>
+                  <div>
+                    <button
+                        onClick={() => handleDelete(propertyRequest._id)}
+                        className="btn flex items-center px-4 gap-1 hover:cursor-pointer hover:bg-red-700 py-2 rounded-3xl btn-success btn-xl bg-red-500 text-white font-bold"
+                      >
+                        <TrashBin size={16} />
+                        <span>Delete</span>
+                      </button>
+                  </div>
+                </td>
+
+                {/* Actions */}
+                <td>
+                  {propertyRequest?.adminStatus === "pending" ? (
+                    <div className="flex justify-center gap-4">
+                      <button
+                        onClick={() => handleApprove(propertyRequest._id)}
+                        className="btn flex items-center gap-1 hover:cursor-pointer hover:bg-green-700 px-3 rounded-3xl btn-success btn-xl bg-green-500 text-white font-bold"
+                      >
+                        <CheckCircle size={16} />
+                        <span>Approve</span>
+                      </button>
+
+
+
+                      <button
+                        onClick={() => handleReject(propertyRequest._id)}
+                        className="btn flex items-center px-4 gap-1 hover:cursor-pointer hover:bg-red-600 py-2 rounded-3xl btn-success btn-xl bg-red-400 text-white font-bold"
+                      >
+                        <XCircle size={16} />
+                        <span>Reject</span>
+                      </button>
+                    </div>
+                  ) : (
+                    <span className="text-sm font-bold border px-3 py-1.5 rounded-full text-gray-300 capitalize">
+                      {propertyRequest.adminStatus} ✓
+                    </span>
+                  )}
+                </td>
+              </tr>
+            ))}
+
+            {postProperties?.length === 0 && (
+              <tr>
+                <td colSpan={6}>
+                  <div className="py-16 text-center">
+                    <div className="text-5xl mb-3">📅</div>
+                    <h3 className="font-semibold text-lg">
+                      No property Requests
+                    </h3>
+                    <p className="text-gray-500 mt-1">
+                      No Owner booking requests found yet.
+                    </p>
+                  </div>
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
   );
 };
 

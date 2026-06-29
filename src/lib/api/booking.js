@@ -11,6 +11,13 @@ export const getOwnerBookingProperties = async (ownerId) => {
 
   return res.json();
 };
+export const getAdminBookingsProperties = async () => {
+  const res = await fetch(
+    `${baseUrl}/api/admin/bookings/properties`,
+  );
+
+  return res.json();
+};
 
 
 
@@ -27,3 +34,4 @@ export const getTenantBookingProperties = async (userId) => {
 export const getAllBookingsProfile = async () => {
     return serverFetch("/api/total/bookings");
 }
+

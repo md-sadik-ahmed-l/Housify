@@ -85,7 +85,7 @@ export default function AddPropertyForm({ user }) {
       image: imageUrl,
       createdAt: new Date(),
       amenities,
-
+      adminStatus: "pending",
       status: "active",
     };
 
@@ -214,7 +214,6 @@ export default function AddPropertyForm({ user }) {
                   </ListBox>
                 </Select.Popover>
               </Select>
-
             </div>
 
             <div className="grid md:grid-cols-2 gap-6">
@@ -369,6 +368,6 @@ export default function AddPropertyForm({ user }) {
           </div>
         </Form>
       </div>
-    </div>      
+    </div>
   );
 }

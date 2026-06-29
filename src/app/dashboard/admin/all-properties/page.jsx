@@ -1,19 +1,33 @@
-"use client";
 
 import AllPropertiesTable from "@/components/dashboard/adminDashboard/AllPropertiesTable";
+import { getAdminAllProperties } from "@/lib/api/adminProperties";
 
+import { getUserSession } from "@/lib/core/session";
+import React from "react";
 
+const BookingRequestsPage = async () => {
+  const user = await getUserSession();
 
-const AllPropertiesAdminPage = () => {
+  if (!user) return <div>Please login first</div>;
+
+  
+
+  const postProperties = await getAdminAllProperties();
+
+  console.log(postProperties);
+
   return (
-    <div className="p-6">
-      <div className="mb-6">
-        <h1 className="text-2xl font-semibold text-default-900">All Properties</h1>
-        <p className="text-sm text-default-500 mt-1">Manage and review all listed properties</p>
+    <div className="max-w-6xl mx-auto space-y-7 my-15">
+      <div>
+        <h1 className="text-2xl sm:text-4xl font-bold">All Properties</h1>
+        <p className="text-gray-400 mt-1">
+          Manage properties post requests for your website.
+        </p>
       </div>
-      <AllPropertiesTable />
+
+      <AllPropertiesTable postProperties={postProperties} />
     </div>
   );
 };
 
-export default AllPropertiesAdminPage;
+export default BookingRequestsPage;
