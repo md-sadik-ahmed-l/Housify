@@ -18,7 +18,7 @@ const BookingRequestsPage = async () => {
 
   return (
     <div className="max-w-6xl mx-auto space-y-7 my-15">
-      <div>
+      <div >
         <h1 className="text-2xl sm:text-4xl font-bold">Booking Requests</h1>
         <p className="text-gray-400 mt-1">
           Manage booking requests for your properties.

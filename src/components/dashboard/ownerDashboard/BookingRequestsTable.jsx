@@ -32,9 +32,6 @@ const BookingRequestsTable = ({ bookingProperties }) => {
     }
   };
 
-  console.log(bookingProperties?.tenantName);
-  console.log(bookingProperties);
-
   const getStatusStyle = (status) => {
     switch (status) {
       case "approved":
@@ -46,21 +43,119 @@ const BookingRequestsTable = ({ bookingProperties }) => {
     }
   };
 
+  const ActionButtons = ({ booking }) =>
+    booking.status === "pending" ? (
+      <div className="flex flex-wrap justify-center gap-2 sm:gap-4">
+        <button
+          onClick={() => handleApprove(booking._id)}
+          className="btn flex items-center gap-1 hover:cursor-pointer hover:bg-green-700 px-3 rounded-3xl btn-success btn-sm sm:btn-md bg-green-500 text-white font-bold"
+        >
+          <CheckCircle size={16} />
+          <span>Approve</span>
+        </button>
+
+        <button
+          onClick={() => handleReject(booking._id)}
+          className="btn flex items-center px-3 gap-1 hover:cursor-pointer hover:bg-red-700 py-2 rounded-3xl btn-sm sm:btn-md bg-red-500 text-white font-bold"
+        >
+          <XCircle size={16} />
+          <span>Reject</span>
+        </button>
+      </div>
+    ) : (
+      <span className="text-sm font-medium text-gray-500 capitalize">
+        {booking.status} ✓
+      </span>
+    );
+
+  if (bookingProperties?.length === 0) {
+    return (
+      <div className="rounded-3xl shadow-lg border border-gray-100 overflow-hidden">
+        <div className="bg-gradient-to-r from-primary to-secondary text-white p-6">
+          <h2 className="text-2xl font-bold">Booking Requests</h2>
+          <p className="text-sm opacity-90 mt-1">
+            Manage tenant booking requests for your properties
+          </p>
+        </div>
+        <div className="py-16 text-center">
+          <div className="text-5xl mb-3">📅</div>
+          <h3 className="font-semibold text-lg">No Booking Requests</h3>
+          <p className="text-gray-500 mt-1">
+            No tenant booking requests found yet.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className=" rounded-3xl shadow-lg border border-gray-100 overflow-hidden">
+    <div className="rounded-3xl shadow-lg border border-gray-100 overflow-hidden">
       {/* Header */}
-      <div className="bg-gradient-to-r from-primary to-secondary text-white p-6">
-        <h2 className="text-2xl font-bold">Booking Requests</h2>
-        <p className="text-sm opacity-90 mt-1">
+      <div className="bg-gradient-to-r from-primary to-secondary text-white p-4 sm:p-6">
+        <h2 className="text-xl sm:text-2xl font-bold">Booking Requests</h2>
+        <p className="text-xs sm:text-sm opacity-90 mt-1">
           Manage tenant booking requests for your properties
         </p>
       </div>
 
-      {/* Table */}
-      <div className="">
-        <table className="table w-full ">
+      {/* ---------- Mobile / Tablet: Card layout ---------- */}
+      <div className="lg:hidden divide-y divide-gray-200">
+        {bookingProperties?.map((booking) => (
+          <div key={booking._id} className="p-4 space-y-3">
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-11 h-11 shrink-0 rounded-full bg-gray-600 flex items-center justify-center">
+                  <User size={22} className="text-primary" />
+                </div>
+                <div className="min-w-0">
+                  <p className="font-semibold text-base sm:text-lg text-gray-300 truncate">
+                    {booking.tenantName}
+                  </p>
+                  <p className="text-xs text-gray-400 truncate">
+                    {booking.phone}
+                  </p>
+                </div>
+              </div>
+
+              <span
+                className={`shrink-0 px-3 py-1 rounded-full text-xs font-semibold capitalize ${getStatusStyle(
+                  booking.status,
+                )}`}
+              >
+                {booking.status}
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
+              <div className="flex items-center gap-2">
+                <Home size={15} className="text-primary shrink-0" />
+                <span className="font-medium truncate">{booking.title}</span>
+              </div>
+
+              <div className="flex items-center gap-2 text-gray-400">
+                <CalendarDays size={15} className="shrink-0" />
+                {new Date(booking.moveInDate).toLocaleDateString("en-GB")}
+              </div>
+
+              <div className="flex items-center gap-2 sm:col-span-2">
+                <span className="font-bold text-green-600 text-base">
+                  $ {booking.totalPrice?.toLocaleString()}
+                </span>
+              </div>
+            </div>
+
+            <div className="pt-2">
+              <ActionButtons booking={booking} />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* ---------- Desktop: Table layout ---------- */}
+      <div className="hidden lg:block overflow-x-auto">
+        <table className="table w-full">
           <thead className="bg-gray-600 h-13">
-            <tr className="text-white text-sm sm:text-xl">
+            <tr className="text-white text-sm xl:text-lg">
               <th>Tenant</th>
               <th>Property</th>
               <th>Amount</th>
@@ -74,17 +169,17 @@ const BookingRequestsTable = ({ bookingProperties }) => {
             {bookingProperties?.map((booking) => (
               <tr
                 key={booking._id}
-                className=" transition-colors border-b h-25 "
+                className="transition-colors border-b h-25"
               >
                 {/* Tenant */}
                 <td>
                   <div className="flex items-center gap-3">
-                    <div className="w-11 ml-2 h-11 rounded-full bg-gray-600 flex items-center justify-center">
-                      <User size={27} className="text-primary " />
+                    <div className="w-11 ml-2 h-11 rounded-full bg-gray-600 flex items-center justify-center shrink-0">
+                      <User size={27} className="text-primary" />
                     </div>
 
-                    <div>
-                      <p className="font-semibold text-xl text-gray-300">
+                    <div className="min-w-0">
+                      <p className="font-semibold text-lg xl:text-xl text-gray-300 truncate max-w-[180px]">
                         {booking.tenantName}
                       </p>
                       <p className="text-xs text-gray-300 truncate max-w-[180px]">
@@ -97,8 +192,10 @@ const BookingRequestsTable = ({ bookingProperties }) => {
                 {/* Property */}
                 <td>
                   <div className="flex items-center gap-2">
-                    <Home size={16} className="text-primary" />
-                    <span className="font-medium">{booking.title}</span>
+                    <Home size={16} className="text-primary shrink-0" />
+                    <span className="font-medium truncate max-w-[160px]">
+                      {booking.title}
+                    </span>
                   </div>
                 </td>
 
@@ -111,9 +208,8 @@ const BookingRequestsTable = ({ bookingProperties }) => {
 
                 {/* Date */}
                 <td>
-                  <div className="flex items-center gap-2 text-gray-300">
+                  <div className="flex items-center gap-2 text-gray-300 whitespace-nowrap">
                     <CalendarDays size={15} />
-                    
                     {new Date(booking.moveInDate).toLocaleDateString("en-GB")}
                   </div>
                 </td>
@@ -131,48 +227,10 @@ const BookingRequestsTable = ({ bookingProperties }) => {
 
                 {/* Actions */}
                 <td>
-                  {booking.status === "pending" ? (
-                    <div className="flex justify-center gap-4">
-                      <button
-                        onClick={() => handleApprove(booking._id)}
-                        className="btn flex items-center gap-1 hover:cursor-pointer hover:bg-green-700 px-3 rounded-3xl btn-success btn-xl bg-green-500 text-white font-bold"
-                      >
-                        <CheckCircle size={16} />
-                        <span>Approve</span>
-                      </button>
-
-                      <button
-                        onClick={() => handleReject(booking._id)}
-                        className="btn flex items-center px-4 gap-1 hover:cursor-pointer hover:bg-red-700 py-2 rounded-3xl btn-success btn-xl bg-red-500 text-white font-bold"
-                      >
-                        <XCircle size={16} />
-                        <span>Reject</span>
-                      </button>
-                    </div>
-                  ) : (
-                    <span className="text-sm font-medium text-gray-500 capitalize">
-                      {booking.status} ✓
-                    </span>
-                  )}
+                  <ActionButtons booking={booking} />
                 </td>
               </tr>
             ))}
-
-            {bookingProperties?.length === 0 && (
-              <tr>
-                <td colSpan={6}>
-                  <div className="py-16 text-center">
-                    <div className="text-5xl mb-3">📅</div>
-                    <h3 className="font-semibold text-lg">
-                      No Booking Requests
-                    </h3>
-                    <p className="text-gray-500 mt-1">
-                      No tenant booking requests found yet.
-                    </p>
-                  </div>
-                </td>
-              </tr>
-            )}
           </tbody>
         </table>
       </div>
