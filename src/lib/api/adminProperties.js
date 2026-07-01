@@ -1,4 +1,4 @@
-import { serverFetch } from "../core/server";
+import { protectedFetch, serverFetch } from "../core/server";
 
 
 
@@ -9,5 +9,5 @@ export const getAdminAllProperties = async () => {
 
 
 export const getAdminAllBookings = async () => {
-    return serverFetch("/api/admin/bookings/properties");
+    return protectedFetch("/api/admin/bookings/properties");
 }

@@ -1,4 +1,4 @@
-import { serverFetch } from "../core/server";
+import { protectedFetch, serverFetch } from "../core/server";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -11,12 +11,11 @@ export const getOwnerBookingProperties = async (ownerId) => {
 
   return res.json();
 };
-export const getAdminBookingsProperties = async () => {
-  const res = await fetch(
-    `${baseUrl}/api/admin/bookings/properties`,
-  );
 
-  return res.json();
+export const getAdminBookingsProperties = async () => {
+  return await protectedFetch(`/api/admin/bookings/properties`);
+
+
 };
 
 

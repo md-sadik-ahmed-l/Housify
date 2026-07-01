@@ -1,5 +1,16 @@
 
+
+import { getUserToken } from "./session";
+
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+
+
+export const authHeaders = async () => {
+
+  const token = await getUserToken();
+  const headers = token ? { Authorization: `Bearer ${token}` } : {};
+  return headers;
+}
 
 
 export const serverFetch = async (path) => {
@@ -14,6 +25,24 @@ export const serverFetch = async (path) => {
    }
 }
 
+export const protectedFetch = async (path) => {
+   try {
+     const res = await fetch(`${baseUrl}${path}`, 
+      {
+        headers: await authHeaders()
+        
+      }
+     );
+
+
+    // handle 401, 404, 403
+    return await res.json();
+
+   } catch (error) {
+    console.log(error)
+    return {}
+   }
+}
 
 
 
@@ -33,6 +62,7 @@ export const serverMutation = async (path, data) => {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            ... await authHeaders()
         },
         body: JSON.stringify(data),
     });
